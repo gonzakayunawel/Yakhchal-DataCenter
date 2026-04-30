@@ -31,7 +31,7 @@ ruff format .    # Format
 ```
 ├── docs/             # Research documents and feasibility studies
 ├── pitch-idea/       # Pitch and concept materials
-└── working-papers/   # Draft working papers (gitignored)
+└── sources/          # Cited papers and reference PDFs (gitignored)
 ```
 
 ## License

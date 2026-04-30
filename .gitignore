@@ -9,5 +9,5 @@ wheels/
 # Virtual environments
 .venv
 
-# Working papers (drafts, not for version control)
-working-papers/
+# Source papers for citation (not committed)
+sources/
