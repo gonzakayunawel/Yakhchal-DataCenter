@@ -1,0 +1,20 @@
+[project]
+name = "yakhchal-datacenter"
+version = "0.1.0"
+description = "Yakhchal DataCenter — PhD research project"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "quarto>=0.1.0",
+    "amplpy>=0.16.0",
+    "ipykernel>=7.2.0",
+    "matplotlib>=3.10.8",
+    "numpy>=2.4.4",
+    "pandas>=3.0.2",
+    "pip>=26.0.1",
+    "pulp>=3.3.0",
+    "ruff>=0.15.11",
+    "scikit-learn>=1.8.0",
+    "scipy>=1.17.1",
+    "seaborn>=0.13.2",
+]
