@@ -11,3 +11,11 @@ wheels/
 
 # Source papers for citation (not committed)
 sources/
+
+# Generated PDFs
+*.pdf
+
+# Quarto Cache
+.quarto/
+
+
