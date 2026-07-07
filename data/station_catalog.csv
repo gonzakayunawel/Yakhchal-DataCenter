@@ -1,0 +1,12 @@
+codigo,nombre,region,latitud,longitud,elevacion_m,fecha_inicio,fecha_fin,link_datos
+PALM,Pozo Almonte,I Región de Tarapacá,-20.26,-69.78,1024.0,1-8-2008,16-11-2021,http://walker.dgf.uchile.cl/Mediciones/datos/csv/PALM.csv
+Crucero2,Crucero II,II Región de Antofagasta,-22.27,-69.57,1183.0,17-8-2012,16-3-2022,http://walker.dgf.uchile.cl/Mediciones/datos/csv/Crucero2.csv
+ADDA,Aeropuerto Copiapo,III Región de Atacama,-27.26,-70.78,210.0,23-2-2013,3-6-2014,http://walker.dgf.uchile.cl/Mediciones/datos/csv/ADDA.csv
+IDEO,Inca de Oro,III Región de Atacama,-26.75,-69.91,1541.0,25-3-2010,21-7-2021,http://walker.dgf.uchile.cl/Mediciones/datos/csv/IDEO.csv
+CAMA,Pampa Camarones,XV Región de Arica y Parinacota,-18.86,-70.22,795.0,26-1-2010,17-10-2017,http://walker.dgf.uchile.cl/Mediciones/datos/csv/CAMA.csv
+SPED,San Pedro de Atacama,II Región de Antofagasta,-22.98,-68.16,2390.0,15-5-2009,7-6-2014,http://walker.dgf.uchile.cl/Mediciones/datos/csv/SPED.csv
+SALV,Aerodromo Salvador,III Región de Atacama,-26.31,-69.75,1617.0,9-8-2010,21-2-2013,http://walker.dgf.uchile.cl/Mediciones/datos/csv/SALV.csv
+PANG,Puerto Angamos,II Región de Antofagasta,-23.07,-70.39,10.0,16-5-2010,17-10-2017,http://walker.dgf.uchile.cl/Mediciones/datos/csv/PANG.csv
+ARMA,Armazones,II Región de Antofagasta,-24.63,-70.24,2581.0,30-10-2010,5-6-2014,http://walker.dgf.uchile.cl/Mediciones/datos/csv/ARMA.csv
+CRUC,Crucero,II Región de Antofagasta,-22.27,-69.57,1176.0,28-8-2009,26-11-2014,http://walker.dgf.uchile.cl/Mediciones/datos/csv/CRUC.csv
+SLAR,Salar (Chuquicamata),II Región de Antofagasta,-22.34,-68.88,2407.0,20-5-2010,1-1-2012,http://walker.dgf.uchile.cl/Mediciones/datos/csv/SLAR.csv
