@@ -18,4 +18,14 @@ sources/
 # Quarto Cache
 .quarto/
 
+# Solar station cached CSVs (large binary files)
+data/solar_stations/
+
+# Wind station cached CSVs (large binary files)
+data/wind_stations/
+
+# Logs and temporary output
+snowflake.log
+data/output/
+data/output*.zip
 
