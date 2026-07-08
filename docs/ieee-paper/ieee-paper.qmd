@@ -1,59 +1,121 @@
 ---
-title: "A typesetting system to untangle the scientific writing process"
+title: "Optimización Multiobjetivo para la Localización y Selección Tecnológica de Datacenters en el Desierto de Atacama"
 authors:
-  - name: Martin Haug
-    email: "haug@typst.app"
+  - name: "Gonzalo Cayunao Erices"
+    email: "g.cayunaoerices@uandresbello.edu"
     affiliations:
-      - name: Typst GmbH
-        department: Co-Founder
-        city: Berlin
-        country: Germany
-  - name: Laurenz Mädje
-    email: "maedje@typst.app"
-    affiliations:
-      - name: Typst GmbH
-        department: Co-Founder
-        city: Berlin
-        country: Germany
+      - name: "Universidad Andrés Bello"
+        department: "Programa Doctoral en Sistemas Avanzados (DISA)"
+        city: "Santiago"
+        country: "Chile"
 abstract: |
-  The process of scientific writing is often tangled up with the intricacies
-  of typesetting, leading to frustration and wasted time for researchers.
-  In this paper, we introduce Typst, a new typesetting system designed 
-  specifically for scientific writing. Typst untangles the typesetting process,
-  allowing researchers to compose papers faster. In a series of experiments we
-  demonstrate that Typst offers several advantages, including faster document
-  creation, simplified syntax, and increased ease-of-use.
-index-terms: 
-  - Scientific writing
-  - Typesetting
-  - Document creation
-  - Syntax
+  La proliferación de datacenters en el norte de Chile impone desafíos críticos de sustentabilidad hídrica y energética. Este trabajo formula y resuelve un modelo de optimización lineal entero-mixto (MILP) de dos etapas para la localización y selección tecnológica óptima de datacenters en el Desierto de Atacama. La primera etapa (Etapa 0) precomputa coeficientes físicos de efectividad energética (PUE) y de consumo de agua (WUE) para cuatro alternativas de enfriamiento (convencional, economizador por aire indirecto, enfriamiento radiativo pasivo y un sistema híbrido en cascada) bajo condiciones meteorológicas locales. Además, se introduce el Índice de Disponibilidad de Curtailment (CAI) como un indicador espacial de sustentabilidad que prioriza la cercanía a nodos de generación renovable con excedentes vertidos. En la segunda etapa, el modelo MILP selecciona la combinación óptima de sitios y tecnologías minimizando un objetivo ponderado de costo, consumo de agua y CAI. Los resultados muestran que sitios como Salar y Crucero dominan las soluciones óptimas, y que el economizador evaporativo e híbrido ofrecen las mejores eficiencias, reduciendo significativamente la huella ecológica del cómputo de alta intensidad en Chile.
+index-terms:
+  - Datacenter
+  - Optimización multiobjetivo
+  - Desierto de Atacama
+  - Enfriamiento radiativo
+  - Curtailment
+  - PUE/WUE
 format:
   ieee-typst: default
 bibliography: refs.bib
+lang: es
 ---
 
-## Introduction
+## 1. Introducción
 
-Scientific writing is a crucial part of the research process, allowing researchers to share their findings with the wider scientific community. However, the process of typesetting scientific documents can often be a frustrating and time-consuming affair, particularly when using outdated tools such as LaTeX. Despite being over 30 years old, it remains a popular choice for scientific writing due to its power and flexibility. However, it also comes with a steep learning curve, complex syntax, and long compile times, leading to frustration and despair for many researchers. @netwok2020
+El crecimiento del cómputo en la nube y la inteligencia artificial ha impulsado una expansión sin precedentes de la infraestructura de centros de datos (datacenters) a nivel global. Sin embargo, estas instalaciones consumen ingentes cantidades de electricidad y agua dulce para refrigerar los servidores. El Desierto de Atacama en Chile se perfila como un laboratorio natural óptimo para albergar estas instalaciones debido a su extraordinaria irradiancia solar y cielos despejados, ideales para la autogeneración fotovoltaica y tecnologías avanzadas de enfriamiento pasivo. No obstante, la extrema escasez hídrica de la región impone severas restricciones éticas y operativas al uso de agua.
 
-### Paper overview
+Este artículo aborda el problema de localización y selección tecnológica óptima de datacenters mediante un enfoque multiobjetivo lineal entero-mixto (MILP) en dos etapas. A diferencia de estudios previos enfocados puramente en la eficiencia térmica o energética, integramos la sostenibilidad energética sistémica utilizando datos georreferenciados de *curtailment* (vertimiento) de energías renovables no convencionales (ERNC). La hipótesis central es que es posible co-localizar datacenters en zonas con altos excedentes de energía que actualmente se pierden por congestión en la transmisión, minimizando simultáneamente el costo operativoizado y el consumo hídrico local.
 
-In this paper we introduce Typst, a new typesetting system designed to streamline the scientific writing process and provide researchers with a fast, efficient, and easy-to-use alternative to existing systems. Our goal is to shake up the status quo and offer researchers a better way to approach scientific writing.
+Las principales contribuciones de este trabajo son:
+1. La formulación de un modelo de dos etapas acoplado termodinámicamente para precomputar coeficientes climáticos y operacionales.
+2. La definición del Índice de Disponibilidad de Curtailment (CAI) utilizando kernels de decaimiento geodésico.
+3. La resolución del problema de portafolio óptimo para el norte de Chile utilizando el solver industrial Gurobi.
 
-By leveraging advanced algorithms and a user-friendly interface, Typst offers several advantages over existing typesetting systems, including faster document creation, simplified syntax, and increased ease-of-use.
+## 2. Trabajo Relacionado
 
-To demonstrate the potential of Typst, we conducted a series of experiments comparing it to other popular typesetting systems, including LaTeX. Our findings suggest that Typst offers several benefits for scientific writing, particularly for novice users who may struggle with the complexities of LaTeX. Additionally, we demonstrate that Typst offers advanced features for experienced users, allowing for greater customization and flexibility in document creation.
+La optimización de datacenters ha sido abordada extensamente. Aili et al. [-@AILI2024122672] demostraron el potencial del enfriamiento radiativo pasivo (`H_RAD`) para disipar calor hacia el espacio exterior a través de la ventana de transparencia atmosférica (8–13 $\mu$m), especialmente en climas extremadamente secos con bajo vapor de agua precipitable (PW). Silva-Llanca et al. [-@silva-llancaImprovingEnergyWater2023] y Yang et al. [-@yangClimaticApplicabilityIndirect2023] analizaron el potencial del enfriamiento gratuito por aire indirecto (IEC, `H_ECO`) y definieron umbrales empíricos de bulbo seco ($T_{db}$) y bulbo húmedo ($T_{wb}$) para conmutar entre modos seco, húmedo y mixto. Finalmente, Lei y Masanet [-@leiClimateTechnologyspecificPUE2022] establecieron un marco termodinámico para acoplar el PUE (Power Usage Effectiveness) y el WUE (Water Usage Effectiveness), validando configuraciones híbridas y chiller convencionales (`H_CONV`).
 
-Overall, we believe that Typst represents a significant step forward in the field of scientific writing and typesetting, providing researchers with a valuable tool to streamline their workflow and focus on what really matters: their research. In the following sections, we will introduce Typst in more detail and provide evidence for its superiority over other typesetting systems in a variety of scenarios.
+Este trabajo cubre la brecha existente en la literatura al integrar por primera vez el origen de la energía renovable vertida (*curtailment*) y los trade-offs de localización territorial para Chile en una formulación de optimización multiobjetivo única.
 
-## Methods
+## 3. Datos y Limitaciones
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dapibus dictum leo, vel molestie felis hendrerit at. In diam nisl, rhoncus dapibus facilisis at, laoreet ac nunc. Sed vehicula metus id faucibus tempus. Etiam at laoreet orci, mattis efficitur sem. Aenean eu malesuada nisl. Mauris tempor pulvinar magna, eu tempus felis aliquet nec. In nec iaculis nisi. Fusce at arcu enim. In ipsum massa, pretium vitae pharetra in, vulputate vel felis.
+Se consolidaron tres fuentes de datos principales para la zona norte del Sistema Eléctrico Nacional (SEN) entre las regiones XV y IV:
 
-$a + b = gamma$
+1. **Datos Meteorológicos Horarios:** Provenientes de la red de medición meteorológica Walker DGF [@walker_dgf] para 11 estaciones solares representativas. Se aplicaron filtros de calidad física para eliminar anomalías (ej. irradiancia negativa, ráfagas extremas) y se calculó la completitud de las observaciones con un umbral estricto del $60\%$ por mes.
+2. **Dataset de Curtailment:** Obtenido a partir de los reportes de reducciones del Coordinador Eléctrico Nacional (CEN) [@cen_curtailment] entre 2022 y abril de 2026. Este dataset contiene 133 centrales de generación (77 solares y 56 eólicas), acumulando un total de $11.95$ TWh vertidos con coordenadas georreferenciadas para el $75\%$ de las plantas.
+3. **Catálogo de Sitios Candidatos:** Congelado en 11 estaciones meteorológicas que cuentan con registros completos de temperatura, humedad, presión, viento y radiación (ver @fig-mapa).
 
-Mauris egestas laoreet aliquam. Integer non convallis risus. Ut eu felis ut augue ultricies tempus. Integer posuere lacinia ex, ac sollicitudin tortor tempus id. Morbi dictum elit at orci accumsan, vitae volutpat dui scelerisque. Pellentesque vitae lectus id nisl posuere placerat pharetra nec ligula. Donec laoreet ligula hendrerit velit tempus porttitor. Vivamus eleifend imperdiet magna quis pellentesque. Pellentesque blandit congue nisi ac ultricies. Sed velit ante, pretium nec facilisis ac, ultricies vitae orci. In hac habitasse platea dictumst. Phasellus massa mauris, tincidunt sed facilisis eu, venenatis a leo.
+*Limitaciones declaradas:* Dado el carácter retrospectivo y la agregación mensual de los datos, el modelo no captura dinámicas horarias transitorias de la red, y trata la capacidad de red disponible como un parámetro de sensibilidad caracterizado por la distancia geodésica ($d_0$).
 
-Fusce id risus mauris. Morbi tincidunt interdum odio, a laoreet sem pulvinar condimentum. Integer suscipit lobortis quam vitae hendrerit. Duis nec convallis mi. Etiam cursus felis eget sem tincidunt, at vulputate urna mattis. Aenean nec libero condimentum, posuere tellus eget, ultrices dui. In quis magna ac metus facilisis porta. Integer et massa dignissim, tempus massa quis, feugiat ante. Aliquam a tortor ligula. Praesent aliquam, lorem id ullamcorper rutrum, nunc orci posuere nulla, id fermentum mi erat a justo. Sed ut sapien vulputate, elementum ante ac, maximus lorem. Phasellus metus est, ultricies et ipsum ac, volutpat lobortis turpis. Vestibulum accumsan elementum vehicula.
+![Mapa de estudio con los sitios candidatos y las plantas de generación renovable con curtailment (tamaño proporcional al MWh vertido).](figures/fig_6_1_mapa.png){#fig-mapa width=70%}
 
+## 4. Metodología
+
+El marco de modelado opera en dos etapas jerárquicas:
+
+### 4.1. Etapa 0: Precómputo de Coeficientes Climáticos
+Para cada estación $i$ y mes, se calculó la presión atmosférica estándar ($P_i$) a partir de su altitud y la Temperatura de Bulbo Húmedo ($T_{wb,i}$) mediante la fórmula psicrométrica de Stull. El vapor de agua precipitable ($PW_i$) se estimó usando la presión de vapor actual de acuerdo a Aili et al. [@AILI2024122672]. 
+
+A partir de estas variables, se aplicaron filtros de screening climáticos ($z_i \in \{0, 1\}$) donde un sitio se considera apto si su humedad relativa promedio es $\le 60\%$, su temperatura de bulbo seco es $\le 20^\circ\text{C}$ y su $T_{wb}$ es $\le 19^\circ\text{C}$ en al menos el $50\%$ de los meses.
+
+Para cada uno de los cuatro *bundles* tecnológicos ($h$), se calcularon el $PUE_{i,h}$ y el $WUE_{i,h}$ combinando eficiencias mecánicas, horas de operación en modo seco y húmedo, y el balance de agua evaporativo (evaporación, arrastre por viento y purga de sólidos) basado en el *EnergyPlus Engineering Reference* [@energyplus_eng_ref]:
+
+- **$H_{CONV}$:** Chiller de agua y torre de enfriamiento, con $PUE = 1.80$ y $WUE = 1.80$ L/kWh.
+- **$H_{ECO}$:** Economizador indirecto (IEC). Utiliza la fracción de horas de modo seco $\phi_i$ calculada mes a mes. El consumo hídrico del modo húmedo incorpora el factor de purga $K = 1.335$ para una concentración de sólidos de 4.
+- **$H_{RAD}$:** Enfriamiento radiativo pasivo acoplado a un chiller de respaldo. Su efectividad escala con la fracción de meses secos y despejados ($PW < 10$ mm).
+- **$H_{HYB}$:** Cascada tecnológica. Prioriza la disipación pasiva por radiación, seguida de la evaporación indirecta, y activa el chiller convencional solo como respaldo de tercer nivel.
+
+![Climatología mensual de estaciones representativas con los umbrales de factibilidad térmicos e hídricos.](figures/fig_6_2_climatologia.png){#fig-clim width=90%}
+
+### 4.2. Índice de Disponibilidad de Curtailment (CAI)
+El CAI de un sitio candidato $i$ se define mediante un decaimiento exponencial geodésico en función de su distancia $d_{ij}$ a cada planta de generación renovable $j$ con coordenadas válidas:
+
+$$
+\text{CAI}_i(d_0) = \sum_{j \in J} C_j \cdot \exp\left(-\frac{d_{ij}}{d_0}\right)
+$$
+
+donde $C_j$ es el curtailment acumulado de la planta $j$ (GWh) y $d_0$ es la escala característica de interconexión. Se modelaron escenarios para $d_0 \in \{20, 50, 100\}$ km (ver @fig-cai).
+
+![Índice CAI por sitio según diferentes escalas características de interconexión ($d_0$).](figures/fig_6_4_cai.png){#fig-cai width=85%}
+
+### 4.3. Etapa 1: Modelo MILP de Localización
+El modelo de optimización lineal entero-mixto se formula como sigue:
+
+$$
+\min_{x, y} \quad \alpha \sum_{i \in I, h \in H} \widehat{\text{Cost}}_{i,h} \cdot y_{i,h} + \beta \sum_{i \in I, h \in H} \widehat{W}_{i,h} \cdot y_{i,h} - \gamma \sum_{i \in I} \widehat{\text{CAI}}_{i} \cdot x_{i}
+$$
+
+Sujeto a:
+1. $\sum_{h \in H} y_{i,h} = x_{i} \quad \forall i \in I$ (Asignación tecnológica única)
+2. $y_{i,h} \le x_{i} \quad \forall i \in I, h \in H$ (Consistencia de variables)
+3. $x_{i} \le z_{i} \quad \forall i \in I$ (Screening climático estricto)
+4. $\sum_{i \in I} x_{i} = P$ (Número de datacenters a localizar)
+5. $\sum_{i \in I, h \in H} \text{CAPEX}_{h} \cdot L \cdot y_{i,h} \le \text{Budget}$ (Restricción de presupuesto)
+6. $x_i, y_{i,h} \in \{0, 1\}$ (Dominio de variables)
+
+Los términos con sombrero ($\widehat{\cdot}$) representan valores normalizados min-max para garantizar la aditividad dimensional. El costo total operativo anualizado se define como $\text{Cost}_{i,h} = \text{CAPEX}_{h}\cdot L + p_{energy}\cdot E_{i,h} + p_{water}\cdot W_{i,h}$.
+
+## 5. Resultados
+
+El modelo MILP fue resuelto en centésimas de segundo con Gurobi Optimizer [@gurobi]. En el caso base ($\alpha=0.4, \beta=0.3, \gamma=0.3, P=2$), el modelo selecciona localizar datacenters en **Crucero (CRUC)** y **Salar (SLAR)**, asignando la tecnología de economizador indirecto (`H_ECO`) a ambos sitios. Esta solución balancea óptimamente un PUE de 1.10–1.20, consumo hídrico extremadamente bajo y una alta cercanía a fuentes con altos niveles de curtailment.
+
+Se ejecutó una grilla de 726 escenarios de sensibilidad variando los pesos del objetivo y el parámetro $d_0$ (ver @fig-pareto). 
+
+- **Robustez de Sitios:** Salar (`SLAR`) es seleccionado en el $72.6\%$ de todos los escenarios de la grilla, seguido por Crucero (`CRUC`) con $49.3\%$, demostrando ser localizaciones excepcionalmente estables ante cambios en las preferencias de diseño.
+- **Robustez Tecnológica:** El economizador indirecto (`H_ECO`) domina la selección en el $98.5\%$ de los casos debido a su gran trade-off entre bajo costo de capital y alta eficiencia operacional.
+- **Trade-off Costo-Agua:** La @fig-pareto muestra cómo el portafolio óptimo transita desde soluciones de bajo costo pero alto consumo hídrico (chillers) hacia configuraciones eficientes de evaporación indirecta.
+
+![Frontera de Pareto del portafolio óptimo de datacenters ($P=2$) proyectando Costo vs. Agua vs. CAI.](figures/fig_6_5_pareto.png){#fig-pareto width=85%}
+
+## 6. Discusión y Limitaciones
+
+La optimización revela que las regiones de Antofagasta e Inca de Oro presentan un clima desértico idóneo para disipación de calor por evaporación y radiación nocturna. Sin embargo, la brecha de transmisión eléctrica en el SEN (Brecha 4) implica que la viabilidad física del curtailment depende críticamente del desarrollo de redes locales de distribución eléctrica o subtransmisión ($d_0 < 50$ km). Sin incentivos regulatorios adecuados, el costo incremental de interconexión directa podría desalentar la instalación de datacenters sostenibles. Proponemos como trabajo futuro integrar el costo detallado del catastro del ECTD-2022 y las restricciones hidrológicas del Catastro Público de Aguas (DGA) para refinar el modelo.
+
+## 7. Conclusiones
+
+Este trabajo presenta un marco metodológico reproducible para planificar datacenters sostenibles en entornos de extrema aridez. Mediante un modelo MILP en dos etapas resuelto con Gurobi, demostramos que la co-localización de datacenters con excedentes solares y eólicos en el desierto chileno es factible y eficiente, logrando PUEs del orden de 1.10 y minimizando significativamente la presión sobre las cuencas hidrológicas mediante el uso de enfriamiento gratuito indirecto.
+
+## Referencias

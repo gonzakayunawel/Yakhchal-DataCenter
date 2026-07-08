@@ -23,7 +23,7 @@
 | 5 | Experimentos y análisis de sensibilidad | ✅ Hecho |
 | 6 | Figuras y tablas | ✅ Hecho |
 | 7 | Verificación de bibliografía | ✅ Hecho |
-| 8 | Redacción del paper (.qmd) | ⬜ Pendiente |
+| 8 | Redacción del paper (.qmd) | ✅ Hecho |
 | 9 | Render final y revisión de cierre | ⬜ Pendiente |
 
 ---
@@ -177,19 +177,19 @@ Reemplazar la plantilla de `docs/ieee-paper/ieee-paper.qmd` (hoy es el ejemplo T
 
 Estructura y contenido por sección:
 
-- [ ] 8.1 **Título, abstract, keywords.** El abstract se escribe al final.
-- [ ] 8.2 **1. Introducción:** motivación (datacenters en Atacama, tensión agua-energía, ~13.7 TWh de curtailment acumulado en el dataset), pregunta de investigación, contribuciones (formulación MILP dos etapas; índice CAI como criterio de sostenibilidad energética novedoso; aplicación con datos chilenos reales), estructura del paper.
-- [ ] 8.3 **2. Trabajo relacionado:** los 4 papers organizados por lo que aporta cada uno (usar tabla H de `Idea_discusion.md`), cerrando con la brecha que este trabajo aborda: ningún trabajo previo integra clima + tecnología + origen de la energía (curtailment) en un modelo de localización para Chile.
-- [ ] 8.4 **3. Datos:** una subsección por dataset (solar, eólico, curtailment) condensando `methods/Metodología_*.md`; limitaciones declaradas (75 % georreferenciación, ventanas temporales heterogéneas, resolución mensual, no es TMY formal).
-- [ ] 8.5 **4. Metodología:**
+- [x] 8.1 **Título, abstract, keywords.** El abstract se escribe al final.
+- [x] 8.2 **1. Introducción:** motivación (datacenters en Atacama, tensión agua-energía, ~13.7 TWh de curtailment acumulado en el dataset), pregunta de investigación, contribuciones (formulación MILP dos etapas; índice CAI como criterio de sostenibilidad energética novedoso; aplicación con datos chilenos reales), estructura del paper.
+- [x] 8.3 **2. Trabajo relacionado:** los 4 papers organizados por lo que aporta cada uno (usar tabla H de `Idea_discusion.md`), cerrando con la brecha que este trabajo aborda: ningún trabajo previo integra clima + tecnología + origen de la energía (curtailment) en un modelo de localización para Chile.
+- [x] 8.4 **3. Datos:** una subsección por dataset (solar, eólico, curtailment) condensando `methods/Metodología_*.md`; limitaciones declaradas (75 % georreferenciación, ventanas temporales heterogéneas, resolución mensual, no es TMY formal).
+- [x] 8.5 **4. Metodología:**
   - 4.1 Arquitectura de dos etapas y justificación (por qué no embeber la física en el MILP).
   - 4.2 Etapa 0: derivación de coeficientes, screening, tabla de trazabilidad parámetro→fuente.
   - 4.3 CAI: definición, kernel de decaimiento, justificación de d0 como parámetro (desde `justificacion_d0.md`).
   - 4.4 Etapa 1: el MILP completo (conjuntos, parámetros, variables, objetivo, R1–R7, dominio).
-- [ ] 8.6 **5. Resultados:** caso base + los tres hallazgos de la Fase 5, con las figuras de la Fase 6.
-- [ ] 8.7 **6. Discusión y limitaciones:** convertir las brechas 2–8 en subsección de limitaciones (material ya casi escrito en `Idea_discusion.md` §7); qué claims quedan condicionados a qué datos; trabajo futuro (series horarias de curtailment, ECTD real, DGA, SEIA, piloto radiativo).
-- [ ] 8.8 **7. Conclusiones.**
-- [ ] 8.9 Escribir el abstract y revisar coherencia título↔contribuciones↔conclusiones.
+- [x] 8.6 **5. Resultados:** caso base + los tres hallazgos de la Fase 5, con las figuras de la Fase 6.
+- [x] 8.7 **6. Discusión y limitaciones:** convertir las brechas 2–8 en subsección de limitaciones (material ya casi escrito en `Idea_discusion.md` §7); qué claims quedan condicionados a qué datos; trabajo futuro (series horarias de curtailment, ECTD real, DGA, SEIA, piloto radiativo).
+- [x] 8.8 **7. Conclusiones.**
+- [x] 8.9 Escribir el abstract y revisar coherencia título↔contribuciones↔conclusiones.
 
 **Done cuando:** borrador completo renderiza sin errores y cada sección cumple su checklist.
 
