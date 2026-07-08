@@ -20,11 +20,53 @@ This project explores the feasibility of adapting the ancient Persian **Yakhchal
 
 ## Quick Start
 
-```bash
-uv sync          # Install dependencies
-ruff check .     # Lint
-ruff format .    # Format
-```
+1. **Install dependencies:**
+   ```bash
+   uv sync
+   ```
+
+2. **Run data pipelines:**
+   ```bash
+   uv run methods/solar_stations_pipeline.py
+   uv run methods/wind_stations_pipeline.py
+   uv run methods/curtailment_pipeline.py
+   ```
+
+3. **Precompute Stage 0 coefficients:**
+   ```bash
+   uv run methods/etapa0_precompute.py
+   ```
+
+4. **Calculate Curtailment Availability Index (CAI):**
+   ```bash
+   uv run methods/cai_pipeline.py
+   ```
+
+5. **Solve MILP (Base Scenario):**
+   ```bash
+   uv run methods/milp_model.py
+   ```
+
+6. **Run Sensitivity Grid (Pareto Front & CAPEX):**
+   ```bash
+   uv run methods/experimentos.py
+   ```
+
+7. **Generate Paper Figures:**
+   ```bash
+   uv run methods/figuras.py
+   ```
+
+8. **Render Quarto Paper to PDF:**
+   ```bash
+   cd docs/ieee-paper && quarto render ieee-paper.qmd
+   ```
+
+9. **Lint & Format code:**
+   ```bash
+   uv run ruff check .
+   uv run ruff format .
+   ```
 
 ## Repository Structure
 

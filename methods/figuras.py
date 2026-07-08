@@ -9,6 +9,7 @@ Produce los gráficos en formato PDF y PNG en el directorio figures/:
 """
 
 from pathlib import Path
+import shutil
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
@@ -328,6 +329,17 @@ def main():
     plot_cai()
     plot_pareto()
     print("\nTodas las figuras se han guardado exitosamente en /figures/.")
+
+    # Copiar localmente al directorio de Quarto para evitar restricciones de Typst
+    paper_fig_dir = ROOT / "docs" / "ieee-paper" / "figures"
+    paper_fig_dir.mkdir(parents=True, exist_ok=True)
+    for p in FIGURES_DIR.glob("fig_6_*.png"):
+        shutil.copy(p, paper_fig_dir / p.name)
+    for p in FIGURES_DIR.glob("fig_6_*.pdf"):
+        shutil.copy(p, paper_fig_dir / p.name)
+    print(
+        "Figuras copiadas localmente a docs/ieee-paper/figures/ para la compilación de Typst."
+    )
 
 
 if __name__ == "__main__":

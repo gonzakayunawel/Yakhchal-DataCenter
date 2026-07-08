@@ -24,7 +24,7 @@
 | 6 | Figuras y tablas | ✅ Hecho |
 | 7 | Verificación de bibliografía | ✅ Hecho |
 | 8 | Redacción del paper (.qmd) | ✅ Hecho |
-| 9 | Render final y revisión de cierre | ⬜ Pendiente |
+| 9 | Render final y revisión de cierre | ✅ Hecho |
 
 ---
 
@@ -197,12 +197,12 @@ Estructura y contenido por sección:
 
 ## Fase 9 — Render final y revisión de cierre
 
-- [ ] 9.1 `quarto render` a PDF sin warnings; figuras y tablas legibles en formato final; ecuaciones bien numeradas y referenciadas.
-- [ ] 9.2 Revisión de consistencia numérica: todo número del texto debe coincidir con `results/` (hacer una pasada explícita).
-- [ ] 9.3 Revisión de citas: cada afirmación fuerte tiene cita o se declara como supuesto propio.
-- [ ] 9.4 Reproducibilidad: desde repo limpio, la secuencia `uv sync` → pipelines → etapa0 → cai → milp → experimentos → figuras → render debe funcionar de punta a punta. Documentar la secuencia en el README.
-- [ ] 9.5 Pasada de estilo/lenguaje (naturalidad del texto, consistencia de terminología ES).
-- [ ] 9.6 Commit final y tag de versión del paper.
+- [x] 9.1 `quarto render` a PDF sin warnings; figuras y tablas legibles en formato final; ecuaciones bien numeradas y referenciadas.
+- [x] 9.2 Revisión de consistencia numérica: todo número del texto debe coincidir con `results/` (hacer una pasada explícita).
+- [x] 9.3 Revisión de citas: cada afirmación fuerte tiene cita o se declara como supuesto propio.
+- [x] 9.4 Reproducibilidad: desde repo limpio, la secuencia `uv sync` → pipelines → etapa0 → cai → milp → experimentos → figuras → render debe funcionar de punta a punta. Documentar la secuencia en el README.
+- [x] 9.5 Pasada de estilo/lenguaje (naturalidad del texto, consistencia de terminología ES).
+- [x] 9.6 Commit final y tag de versión del paper.
 
 **Done cuando:** PDF final generado desde repo reproducible.
 

@@ -272,7 +272,9 @@ def load_and_normalize(filepath: Path) -> pd.DataFrame | None:
     if "wind_speed" in df.columns:
         df.loc[(df["wind_speed"] < 0) | (df["wind_speed"] > 40), "wind_speed"] = np.nan
     if "temperatura" in df.columns:
-        df.loc[(df["temperatura"] < -15) | (df["temperatura"] > 45), "temperatura"] = np.nan
+        df.loc[(df["temperatura"] < -15) | (df["temperatura"] > 45), "temperatura"] = (
+            np.nan
+        )
     if "humedad" in df.columns:
         df.loc[(df["humedad"] < 0) | (df["humedad"] > 100), "humedad"] = np.nan
     if "ghi" in df.columns:
@@ -283,15 +285,15 @@ def load_and_normalize(filepath: Path) -> pd.DataFrame | None:
 
 def resample_monthly(df: pd.DataFrame) -> pd.DataFrame:
     """Resample to monthly means. Drops months that are entirely NaN.
-    
+
     Se exige un 60% de completitud de datos horarios válidos por mes.
     """
     monthly_mean = df.resample("ME").mean()
     monthly_count = df.resample("ME").count()
-    
+
     expected_hours = monthly_mean.index.days_in_month * 24
     min_hours = expected_hours * 0.60
-    
+
     for col in monthly_mean.columns:
         if col in monthly_count.columns:
             monthly_mean.loc[monthly_count[col] < min_hours, col] = np.nan
