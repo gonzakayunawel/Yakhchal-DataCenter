@@ -2,6 +2,11 @@
 
 > **Objetivo:** Paper académico (ejercicio de curso, formato IEEE vía Quarto) que formula y resuelve un MILP de dos etapas para localización y selección tecnológica de datacenters en el desierto chileno, integrando clima (PUE/WUE por tecnología), sostenibilidad energética (curtailment/CAI) y costo.
 >
+> **Desviaciones registradas en la ejecución (revisión 2026-07-08):**
+> - **Solver:** el MILP se implementó con **Gurobi** (licencia académica / licencia pip limitada, suficiente para este tamaño de modelo) en lugar de PuLP como decía la Fase 4. PuLP sigue en las dependencias como alternativa.
+> - **Formato del paper:** se adoptó **ieee-typst** (extensión quarto-ext/ieee); AGENTS.md fue actualizado para reflejarlo. XeLaTeX se mantiene para el resto de documentos.
+> - **Conjunto I:** se excluyó `Crucero2` por compartir ubicación exacta con `CRUC` (deduplicación de sitio; ver `docs/datasets/sitios_candidatos.md`). El conjunto final tiene 10 sitios, 7 con z_i=1.
+>
 > **Decisiones ya tomadas:**
 > - Brecha 4 (ECTD-2022 / capacidad real de red): **NO** se descargan datos reales. `d0` se trata como **parámetro de sensibilidad justificado** (valores 20/50/100 km), declarándolo explícitamente como limitación.
 > - Resolución temporal: **mensual** (Opción 2 de `Idea_discusion.md`), suficiente para precomputar coeficientes de Etapa 0.

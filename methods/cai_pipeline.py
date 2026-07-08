@@ -76,8 +76,14 @@ def load_curtailment(path: Path) -> pd.DataFrame:
 
 
 def load_stations(path: Path) -> pd.DataFrame:
-    """Carga el catálogo de estaciones solares candidatas."""
+    """Carga el catálogo de estaciones solares candidatas.
+
+    Excluye Crucero2: comparte ubicación con CRUC (-22.27, -69.57) y
+    duplicaría el mismo sitio (y su CAI) en el modelo de localización
+    (misma exclusión que en etapa0_precompute.py).
+    """
     df = pd.read_csv(path)
+    df = df[df["codigo"] != "Crucero2"]
     print(f"[DATOS] Estaciones candidatas: {len(df)}")
     return df
 

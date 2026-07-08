@@ -316,12 +316,13 @@ def run_verification(config):
     }
     coef2, _ = load_parameters(cfg2)
     sol2 = build_and_solve(coef2, cfg2, "test_cost", silent=True)
-    if sol2 is not None:
+    if sol2 is not None and sol2.iloc[0]["Cost_usd"] == coef2["Cost_usd"].min():
         print(
-            f"    ✅ PASS: {sol2.iloc[0]['estacion']} → {sol2.iloc[0]['bundle']} (Cost=${sol2.iloc[0]['Cost_usd']:,.0f})"
+            f"    ✅ PASS: {sol2.iloc[0]['estacion']} → {sol2.iloc[0]['bundle']} "
+            f"(Cost=${sol2.iloc[0]['Cost_usd']:,.0f} = mínimo global)"
         )
     else:
-        print("    ❌ FAIL")
+        print("    ❌ FAIL: no eligió la combinación de costo mínimo")
         all_passed = False
 
     # Test 3: β=1 (solo agua)
@@ -336,12 +337,13 @@ def run_verification(config):
     }
     coef3, _ = load_parameters(cfg3)
     sol3 = build_and_solve(coef3, cfg3, "test_water", silent=True)
-    if sol3 is not None:
+    if sol3 is not None and sol3.iloc[0]["W_m3"] == coef3["W_m3"].min():
         print(
-            f"    ✅ PASS: {sol3.iloc[0]['estacion']} → {sol3.iloc[0]['bundle']} (WUE={sol3.iloc[0]['WUE_L_kWh']:.3f})"
+            f"    ✅ PASS: {sol3.iloc[0]['estacion']} → {sol3.iloc[0]['bundle']} "
+            f"(WUE={sol3.iloc[0]['WUE_L_kWh']:.3f} = mínimo global)"
         )
     else:
-        print("    ❌ FAIL")
+        print("    ❌ FAIL: no eligió la combinación de menor consumo de agua")
         all_passed = False
 
     # Test 4: γ=1 (solo CAI)
@@ -356,12 +358,13 @@ def run_verification(config):
     }
     coef4, _ = load_parameters(cfg4)
     sol4 = build_and_solve(coef4, cfg4, "test_cai", silent=True)
-    if sol4 is not None:
+    if sol4 is not None and sol4.iloc[0]["CAI"] == coef4["CAI"].max():
         print(
-            f"    ✅ PASS: {sol4.iloc[0]['estacion']} → {sol4.iloc[0]['bundle']} (CAI={sol4.iloc[0]['CAI']:.0f})"
+            f"    ✅ PASS: {sol4.iloc[0]['estacion']} → {sol4.iloc[0]['bundle']} "
+            f"(CAI={sol4.iloc[0]['CAI']:.0f} = máximo global)"
         )
     else:
-        print("    ❌ FAIL")
+        print("    ❌ FAIL: no eligió el sitio con mayor CAI")
         all_passed = False
 
     # Test 5: Budget=0 → infactible

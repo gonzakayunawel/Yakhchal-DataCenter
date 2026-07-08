@@ -33,13 +33,13 @@ quarto render <file>.qmd --to pdf  # Render Quarto doc to PDF
 
 ## Python Dependencies
 
-- quarto, amplpy, ipykernel, matplotlib, numpy, pandas, pip, pulp, ruff, scikit-learn, scipy, seaborn
+- quarto, amplpy, gurobipy, ipykernel, matplotlib, numpy, openpyxl, geopandas, pandas, pip, pulp, ruff, scikit-learn, scipy, seaborn
 
 ## Conventions
 
 - Use **uv** exclusively — never pip directly
 - Follow PEP 8 — use `ruff` for linting and formatting
 - Research documents (.qmd) written in Spanish (lang: es)
-- PDF engine: XeLaTeX with Latin Modern fonts
+- PDF engine: the IEEE paper (`docs/ieee-paper/`) renders via **Typst** (`format: ieee-typst`, quarto-ext/ieee extension); other .qmd documents use XeLaTeX with Latin Modern fonts
 - PDFs are gitignored — always re-render from source .qmd files
 - Zotero handles bibliography — export to .bib as needed

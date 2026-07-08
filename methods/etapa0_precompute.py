@@ -34,6 +34,14 @@ RHO_WATER = 1000.0  # kg/m³
 H_FG = 2_500_000.0  # J/kg — calor latente de vaporización
 N_HOURS = 8760  # horas por año
 
+# Estaciones excluidas del conjunto de sitios candidatos I.
+# Crucero2 comparte ubicación con CRUC (-22.27, -69.57): son dos estaciones
+# en el mismo punto y tratarlas como sitios independientes duplica el sitio
+# (y su CAI) en el modelo de localización. Se conserva CRUC porque su GHI
+# medio (~563 W/m²) es físicamente consistente con la zona, mientras que el
+# de Crucero2 (~301 W/m²) sugiere problemas de sensor/sombreado.
+EXCLUDED_STATIONS = {"Crucero2"}
+
 # Parámetros IEC (EnergyPlus Engineering Reference, DOE 2017)
 F_DRIFT = 0.002  # fracción de drift (media rígida CelDek)
 R_CONCENTRATION = 4  # ciclos de concentración (agua potable)
@@ -106,6 +114,7 @@ def load_climatology():
     cuando la estación no la mide directamente.
     """
     solar = pd.read_csv(DATA_DIR / "dataset_solar_mensual.csv")
+    solar = solar[~solar["estacion"].isin(EXCLUDED_STATIONS)]
     solar["fecha"] = pd.to_datetime(solar["fecha"])
     solar["mes"] = solar["fecha"].dt.month
 
