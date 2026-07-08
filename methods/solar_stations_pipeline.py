@@ -252,13 +252,41 @@ def load_and_normalize(filepath: Path) -> pd.DataFrame | None:
 
     df = df[numeric_cols]
 
+    # --- QC FILTERS (Instantaneous values) ---
+    if "ghi" in df.columns:
+        df.loc[(df["ghi"] < 0) | (df["ghi"] > 1500), "ghi"] = np.nan
+    if "dni" in df.columns:
+        df.loc[(df["dni"] < 0) | (df["dni"] > 1500), "dni"] = np.nan
+    if "viento" in df.columns:
+        df.loc[(df["viento"] < 0) | (df["viento"] > 40), "viento"] = np.nan
+    if "temperatura" in df.columns:
+        df.loc[(df["temperatura"] < -15) | (df["temperatura"] > 45), "temperatura"] = np.nan
+    if "humedad" in df.columns:
+        df.loc[(df["humedad"] < 0) | (df["humedad"] > 100), "humedad"] = np.nan
+
     return df
 
 
 def resample_monthly(df: pd.DataFrame) -> pd.DataFrame:
-    """Resample to monthly means. Drops months that are entirely NaN."""
-    monthly = df.resample("ME").mean()
-    monthly = monthly.dropna(how="all")
+    """Resample to monthly means. Drops months that are entirely NaN.
+    
+    Decisión documentada: Los promedios mensuales de GHI y DNI se calculan sobre 
+    las 24 horas del día (no solo horas diurnas) para ser consistentes con la 
+    integración de energía mensual total.
+    Se exige un 60% de completitud de datos horarios válidos por mes.
+    """
+    monthly_mean = df.resample("ME").mean()
+    monthly_count = df.resample("ME").count()
+    
+    # Requisito de completitud: 60% de horas del mes
+    expected_hours = monthly_mean.index.days_in_month * 24
+    min_hours = expected_hours * 0.60
+    
+    for col in monthly_mean.columns:
+        if col in monthly_count.columns:
+            monthly_mean.loc[monthly_count[col] < min_hours, col] = np.nan
+
+    monthly = monthly_mean.dropna(how="all")
     monthly = monthly.rename(columns=RENAME_MAP)
     return monthly
 

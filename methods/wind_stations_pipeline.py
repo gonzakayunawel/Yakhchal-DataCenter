@@ -267,38 +267,38 @@ def load_and_normalize(filepath: Path) -> pd.DataFrame | None:
         return None
 
     df = df[numeric_cols]
+
+    # --- QC FILTERS (Instantaneous values) ---
+    if "wind_speed" in df.columns:
+        df.loc[(df["wind_speed"] < 0) | (df["wind_speed"] > 40), "wind_speed"] = np.nan
+    if "temperatura" in df.columns:
+        df.loc[(df["temperatura"] < -15) | (df["temperatura"] > 45), "temperatura"] = np.nan
+    if "humedad" in df.columns:
+        df.loc[(df["humedad"] < 0) | (df["humedad"] > 100), "humedad"] = np.nan
+    if "ghi" in df.columns:
+        df.loc[(df["ghi"] < 0) | (df["ghi"] > 1500), "ghi"] = np.nan
+
     return df
 
 
 def resample_monthly(df: pd.DataFrame) -> pd.DataFrame:
-    monthly = df.resample("ME").mean()
-    monthly = monthly.dropna(how="all")
+    """Resample to monthly means. Drops months that are entirely NaN.
+    
+    Se exige un 60% de completitud de datos horarios válidos por mes.
+    """
+    monthly_mean = df.resample("ME").mean()
+    monthly_count = df.resample("ME").count()
+    
+    expected_hours = monthly_mean.index.days_in_month * 24
+    min_hours = expected_hours * 0.60
+    
+    for col in monthly_mean.columns:
+        if col in monthly_count.columns:
+            monthly_mean.loc[monthly_count[col] < min_hours, col] = np.nan
+
+    monthly = monthly_mean.dropna(how="all")
     monthly = monthly.rename(columns=RENAME_MAP)
     return monthly
-
-
-SENTINEL_RULES = {
-    "temperatura_mean_c": (-30.0, "lt"),
-    "ghi_mean_wm2": (1500.0, "gt"),
-}
-
-
-def filter_sentinels(df: pd.DataFrame) -> pd.DataFrame:
-    """Replace physically impossible sentinel values with NaN."""
-    for col, (threshold, direction) in SENTINEL_RULES.items():
-        if col in df.columns:
-            if direction == "lt":
-                mask = df[col] < threshold
-            else:
-                mask = df[col] > threshold
-            n_filtered = mask.sum()
-            if n_filtered > 0:
-                df.loc[mask, col] = np.nan
-                op = "<" if direction == "lt" else ">"
-                print(
-                    f"  [FILTER] {col}: {n_filtered} valores centinela ({op} {threshold}) → NaN"
-                )
-    return df
 
 
 def consolidate(catalog: pd.DataFrame, cached_paths: dict) -> pd.DataFrame:
@@ -317,8 +317,6 @@ def consolidate(catalog: pd.DataFrame, cached_paths: dict) -> pd.DataFrame:
         monthly = resample_monthly(df)
         if monthly.empty:
             continue
-
-        monthly = filter_sentinels(monthly)
 
         monthly["estacion"] = code
         monthly["nombre"] = row["nombre"]

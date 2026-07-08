@@ -15,8 +15,8 @@
 
 | Fase | Descripción | Estado |
 |------|-------------|--------|
-| 0 | Ordenamiento del repositorio | ⬜ Pendiente |
-| 1 | QC y limpieza de datasets | ⬜ Pendiente |
+| 0 | Ordenamiento del repositorio | ✅ Hecho |
+| 1 | QC y limpieza de datasets | ✅ Hecho |
 | 2 | Etapa 0 — Precómputo de coeficientes | ⬜ Pendiente |
 | 3 | Índice CAI (curtailment) | ⬜ Pendiente |
 | 4 | Etapa 1 — Modelo MILP | ⬜ Pendiente |
@@ -32,10 +32,10 @@
 
 Preparar el terreno para que las fases siguientes no arrastren desorden.
 
-- [ ] 0.1 Commitear los archivos sin trackear pendientes (`docs/feasibility/*.md`, CSVs demo del ECTD) con mensaje que deje claro que los docs de feasibility son **material de investigación sin verificar** (salidas de Perplexity).
-- [ ] 0.2 Mover o eliminar residuos de `data/`: `output.zip`, `output (1).zip`, `output (2).zip`, `snowflake.log` (raíz). Si no se usan, borrarlos y actualizar `.gitignore`.
-- [ ] 0.3 Marcar `datos_instalaciones_ectd2022_demo.csv` y `beta_por_coordenada_ectd2022.csv` como **datos ilustrativos no reales** (renombrar con sufijo `_demo`/`_ilustrativo` o documentarlo en `docs/datasets/`). Contienen filas corruptas (caracteres cirílicos, coordenadas incoherentes) — no deben usarse como datos de entrada del modelo.
-- [ ] 0.4 Crear estructura de directorios para resultados: `results/` (CSVs de salida de Etapa 0/CAI/MILP) y `figures/` (PNG/PDF para el paper). Agregar a `.gitignore` lo que corresponda (o versionar los CSVs finales pequeños).
+- [x] 0.1 Commitear los archivos sin trackear pendientes (`docs/feasibility/*.md`, CSVs demo del ECTD) con mensaje que deje claro que los docs de feasibility son **material de investigación sin verificar** (salidas de Perplexity).
+- [x] 0.2 Mover o eliminar residuos de `data/`: `output.zip`, `output (1).zip`, `output (2).zip`, `snowflake.log` (raíz). Si no se usan, borrarlos y actualizar `.gitignore`.
+- [x] 0.3 Marcar `datos_instalaciones_ectd2022_demo.csv` y `beta_por_coordenada_ectd2022.csv` como **datos ilustrativos no reales** (renombrar con sufijo `_demo`/`_ilustrativo` o documentarlo en `docs/datasets/`). Contienen filas corruptas (caracteres cirílicos, coordenadas incoherentes) — no deben usarse como datos de entrada del modelo.
+- [x] 0.4 Crear estructura de directorios para resultados: `results/` (CSVs de salida de Etapa 0/CAI/MILP) y `figures/` (PNG/PDF para el paper). Agregar a `.gitignore` lo que corresponda (o versionar los CSVs finales pequeños).
 
 **Done cuando:** `git status` limpio, sin archivos ambiguos, y estructura `results/` + `figures/` creada.
 
@@ -45,16 +45,16 @@ Preparar el terreno para que las fases siguientes no arrastren desorden.
 
 Los coeficientes de Etapa 0 dependen de climatologías confiables. Problemas detectados en la auditoría: GHI mínimo de −5 W/m² (valores nocturnos sin filtrar), viento mensual máximo de 26 m/s (outlier improbable para media mensual), columnas vacías de humedad/GHI en algunas estaciones eólicas (p.ej. ARMAZ).
 
-- [ ] 1.1 Agregar filtros de QC a `methods/solar_stations_pipeline.py`:
+- [x] 1.1 Agregar filtros de QC a `methods/solar_stations_pipeline.py`:
   - GHI/DNI: descartar valores < 0; recorte de outliers físicos (GHI > 1500 W/m² instantáneo).
   - Promedios mensuales de GHI/DNI: decidir si se calculan sobre 24 h o solo horas diurnas — **documentar la decisión** (afecta comparación con Explorador Solar).
   - Viento: descartar valores < 0 y > 40 m/s (instantáneo); revisar el origen del outlier de 26 m/s en la media mensual.
   - Temperatura/HR: rangos físicos (−15 a 45 °C; 0–100 %).
   - Requisito de completitud: descartar meses con < 60 % de datos horarios válidos (umbral a documentar).
-- [ ] 1.2 Aplicar los mismos filtros a `methods/wind_stations_pipeline.py`. Documentar qué estaciones quedan sin HR o presión (necesarias para T_wb y PW).
-- [ ] 1.3 Regenerar `data/dataset_solar_mensual.csv` y `data/dataset_eolico_mensual.csv`; regenerar los reportes de metadatos en `docs/datasets/`.
-- [ ] 1.4 Verificación: script o notebook rápido que confirme (a) no hay GHI/DNI negativos, (b) medias mensuales de viento < 15 m/s o justificadas, (c) conteo de meses por estación ≥ 12 para las estaciones que serán sitios candidatos. Guardar resumen en `docs/datasets/qc_report.md`.
-- [ ] 1.5 Definir y congelar el **conjunto de sitios candidatos I**: partir de las 11 estaciones solares; excluir las que tengan < 12 meses de cobertura o variables faltantes críticas. Registrar el conjunto final (con justificación de exclusiones) en `docs/datasets/sitios_candidatos.md`.
+- [x] 1.2 Aplicar los mismos filtros a `methods/wind_stations_pipeline.py`. Documentar qué estaciones quedan sin HR o presión (necesarias para T_wb y PW).
+- [x] 1.3 Regenerar `data/dataset_solar_mensual.csv` y `data/dataset_eolico_mensual.csv`; regenerar los reportes de metadatos en `docs/datasets/`.
+- [x] 1.4 Verificación: script o notebook rápido que confirme (a) no hay GHI/DNI negativos, (b) medias mensuales de viento < 15 m/s o justificadas, (c) conteo de meses por estación ≥ 12 para las estaciones que serán sitios candidatos. Guardar resumen en `docs/datasets/qc_report.md`.
+- [x] 1.5 Definir y congelar el **conjunto de sitios candidatos I**: partir de las 11 estaciones solares; excluir las que tengan < 12 meses de cobertura o variables faltantes críticas. Registrar el conjunto final (con justificación de exclusiones) en `docs/datasets/sitios_candidatos.md`.
 
 **Done cuando:** datasets regenerados pasan las verificaciones de 1.4 y el conjunto I está congelado y documentado.
 
