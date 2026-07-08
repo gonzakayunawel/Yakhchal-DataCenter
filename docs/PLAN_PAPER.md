@@ -17,7 +17,7 @@
 |------|-------------|--------|
 | 0 | Ordenamiento del repositorio | ✅ Hecho |
 | 1 | QC y limpieza de datasets | ✅ Hecho |
-| 2 | Etapa 0 — Precómputo de coeficientes | ⬜ Pendiente |
+| 2 | Etapa 0 — Precómputo de coeficientes | ✅ Hecho |
 | 3 | Índice CAI (curtailment) | ⬜ Pendiente |
 | 4 | Etapa 1 — Modelo MILP | ⬜ Pendiente |
 | 5 | Experimentos y análisis de sensibilidad | ⬜ Pendiente |
@@ -66,19 +66,19 @@ Script nuevo: `methods/etapa0_precompute.py`. Entrada: datasets mensuales limpio
 
 Bundles: `H_RAD` (radiativo, Aili), `H_ECO` (economizador/IEC, Silva-Llanca + Yang), `H_HYB` (híbrido), `H_CONV` (chiller convencional, Lei & Masanet Casos 5/8).
 
-- [ ] 2.1 **Climatología por sitio:** promedios mensuales multianuales (12 valores por variable por estación) de T_db, HR, GHI, DNI, viento, presión (presión: derivarla de la elevación vía atmósfera estándar si la estación no la mide — documentar).
-- [ ] 2.2 **Variables derivadas por sitio-mes:**
+- [x] 2.1 **Climatología por sitio:** promedios mensuales multianuales (12 valores por variable por estación) de T_db, HR, GHI, DNI, viento, presión (presión: derivarla de la elevación vía atmósfera estándar si la estación no la mide — documentar).
+- [x] 2.2 **Variables derivadas por sitio-mes:**
   - T_wb con la fórmula de Stull (válida para HR > 5 %; verificar aplicabilidad en meses extremadamente secos y documentar el tratamiento).
   - PW (agua precipitable) con la Ec. A5 de Aili a partir de T_db, HR, presión.
-- [ ] 2.3 **Screening climático z_i:** implementar los umbrales consolidados (RH 50–60 % Silva-Llanca; T_db 20 °C Silva-Llanca / 17 °C Yang; T_wb 19 °C Yang; PW bajo para radiativo, Aili). Definir z_i = 1 si el sitio cumple los umbrales en una fracción mínima de meses (fracción a definir y documentar). Salida: tabla de screening con detalle por umbral.
-- [ ] 2.4 **PUE/WUE por bundle:**
+- [x] 2.3 **Screening climático z_i:** implementar los umbrales consolidados (RH 50–60 % Silva-Llanca; T_db 20 °C Silva-Llanca / 17 °C Yang; T_wb 19 °C Yang; PW bajo para radiativo, Aili). Definir z_i = 1 si el sitio cumple los umbrales en una fracción mínima de meses (fracción a definir y documentar). Salida: tabla de screening con detalle por umbral.
+- [x] 2.4 **PUE/WUE por bundle:**
   - `H_CONV`: valores de referencia de Lei & Masanet (Casos 5/8, mediana y rango) — constantes por sitio, con corrección por clima si las figuras 5–6 lo permiten; si no, constante declarada.
   - `H_ECO`: horas/meses en modo seco/húmedo/mixto según umbrales de Yang aplicados a la climatología mensual → fracción φ_i; WUE del modo húmedo con el modelo de balance de agua IEC de EnergyPlus (evaporación + drift + blowdown, doc en `docs/feasibility/Balance de consumo de agua en IEC.md`, **verificar ecuaciones contra la fuente original antes de usar**).
   - `H_RAD`: potencial de enfriamiento radiativo con el modelo de Aili (requiere GHI, viento, PW, T_db); fracción de carga cubierta y respaldo mecánico restante.
   - `H_HYB`: cascada C9 de `Idea_discusion.md`: W_anual = W_base + (1−φ_i)·W_respaldo, combinando radiativo + economizador con respaldo convencional.
   - Para cada coeficiente, registrar en el CSV la **fuente y el supuesto** (columna `supuesto`/`fuente`), porque la trazabilidad es parte del argumento del paper.
-- [ ] 2.5 **Sanity check de resultados:** comparar los PUE obtenidos contra los rangos publicados (1.12–1.25 híbridos grandes; 1.39–1.98 medianos; ~2 convencional pequeño, Lei & Masanet §4.2). Si algo cae fuera, investigar antes de continuar. Registrar comparación en `results/etapa0_validacion.md`.
-- [ ] 2.6 Correr `ruff check` y `ruff format` sobre los scripts nuevos.
+- [x] 2.5 **Sanity check de resultados:** comparar los PUE obtenidos contra los rangos publicados (1.12–1.25 híbridos grandes; 1.39–1.98 medianos; ~2 convencional pequeño, Lei & Masanet §4.2). Si algo cae fuera, investigar antes de continuar. Registrar comparación en `results/etapa0_validacion.md`.
+- [x] 2.6 Correr `ruff check` y `ruff format` sobre los scripts nuevos.
 
 **Done cuando:** `results/etapa0_coeficientes.csv` existe con todas las combinaciones (sitio, bundle), los valores pasan el sanity check 2.5, y cada coeficiente tiene fuente/supuesto trazado.
 
