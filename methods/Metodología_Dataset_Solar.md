@@ -80,7 +80,7 @@ Dado que los CSVs de distintas estaciones presentan esquemas heterogéneos (colu
 2.  Se incorporan las columnas de metadatos: `estacion`, `nombre`, `region`, `longitud`, `latitud`, `elevacion_m`, `fuente_datos`.
 3.  Se reordenan las columnas al formato canónico especificado.
 4.  El dataset resultante se exporta a `data/dataset_solar_mensual.csv`.
-5.  Simultáneamente se genera un archivo de metadatos en formato Markdown (`data/dataset_solar_mensual.md`) con estadísticas descriptivas y notas de cobertura temporal.
+5.  Simultáneamente se genera un archivo de metadatos en formato Markdown (`docs/datasets/dataset_solar_mensual.md`) con estadísticas descriptivas y notas de cobertura temporal.
 
 ---
 
@@ -142,7 +142,7 @@ El pipeline es **idempotente**: si los CSVs ya fueron descargados, solo re-ejecu
 |:---|:---|
 | `data/station_catalog.csv` | Catálogo de estaciones extraído del Excel |
 | `data/dataset_solar_mensual.csv` | Dataset consolidado de medias mensuales |
-| `data/dataset_solar_mensual.md` | Reporte de estadísticas y cobertura temporal |
+| `docs/datasets/dataset_solar_mensual.md` | Reporte de estadísticas y cobertura temporal |
 | `data/solar_stations/*.csv` | Caché local de datos crudos descargados |
 
 ---

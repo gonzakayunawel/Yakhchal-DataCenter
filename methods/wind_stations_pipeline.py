@@ -21,7 +21,7 @@ EXCEL_PATH = DATA_DIR / "Estaciones de Medición Eólica.xlsx"
 CACHE_DIR = DATA_DIR / "wind_stations"
 CATALOG_PATH = DATA_DIR / "station_catalog_wind.csv"
 DATASET_PATH = DATA_DIR / "dataset_eolico_mensual.csv"
-DATASET_MD_PATH = DATA_DIR / "dataset_eolico_mensual.md"
+DATASET_MD_PATH = ROOT / "docs" / "datasets" / "dataset_eolico_mensual.md"
 
 TARGET_WIND_HEIGHT = 20.0
 
@@ -61,7 +61,9 @@ def parse_station_sheet(ws) -> dict:
             link = key.strip()
 
     fecha_inicio, fecha_fin = "", ""
-    match = re.search(r"desde\s+(\d{1,2}-\d{1,2}-\d{4})\s+hasta\s+(\d{1,2}-\d{1,2}-\d{4})", dates_str)
+    match = re.search(
+        r"desde\s+(\d{1,2}-\d{1,2}-\d{4})\s+hasta\s+(\d{1,2}-\d{1,2}-\d{4})", dates_str
+    )
     if match:
         fecha_inicio = match.group(1)
         fecha_fin = match.group(2)
@@ -82,7 +84,7 @@ def parse_station_sheet(ws) -> dict:
 def _parse_numeric(val):
     try:
         return float(val)
-    except (ValueError, TypeError):
+    except ValueError, TypeError:
         return None
 
 
@@ -105,7 +107,9 @@ def build_catalog() -> pd.DataFrame:
 def download_csv(url: str, dest: Path, retries: int = 3, delay: float = 2.0) -> bool:
     for attempt in range(retries):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "Yakhchal-DataCenter/0.1"})
+            req = urllib.request.Request(
+                url, headers={"User-Agent": "Yakhchal-DataCenter/0.1"}
+            )
             with urllib.request.urlopen(req, timeout=60) as resp:
                 data = resp.read()
             dest.write_bytes(data)
@@ -214,7 +218,9 @@ def normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
     if not mapping:
         return pd.DataFrame()
 
-    subset_cols = [time_col] + list(mapping.keys()) if time_col else list(mapping.keys())
+    subset_cols = (
+        [time_col] + list(mapping.keys()) if time_col else list(mapping.keys())
+    )
     df_sub = df[subset_cols].copy()
     df_sub = df_sub.rename(columns=rename)
     if time_col:
@@ -289,7 +295,9 @@ def filter_sentinels(df: pd.DataFrame) -> pd.DataFrame:
             if n_filtered > 0:
                 df.loc[mask, col] = np.nan
                 op = "<" if direction == "lt" else ">"
-                print(f"  [FILTER] {col}: {n_filtered} valores centinela ({op} {threshold}) → NaN")
+                print(
+                    f"  [FILTER] {col}: {n_filtered} valores centinela ({op} {threshold}) → NaN"
+                )
     return df
 
 
@@ -322,7 +330,9 @@ def consolidate(catalog: pd.DataFrame, cached_paths: dict) -> pd.DataFrame:
 
         monthly = monthly.reset_index().rename(columns={"timestamp": "fecha"})
         all_records.append(monthly)
-        print(f"  {len(monthly)} meses procesados ({monthly['fecha'].min().strftime('%Y-%m')} → {monthly['fecha'].max().strftime('%Y-%m')})")
+        print(
+            f"  {len(monthly)} meses procesados ({monthly['fecha'].min().strftime('%Y-%m')} → {monthly['fecha'].max().strftime('%Y-%m')})"
+        )
 
     if not all_records:
         raise RuntimeError("No se procesó ninguna estación")
@@ -330,10 +340,20 @@ def consolidate(catalog: pd.DataFrame, cached_paths: dict) -> pd.DataFrame:
     final = pd.concat(all_records, ignore_index=True)
 
     column_order = [
-        "estacion", "nombre", "region", "longitud", "latitud",
-        "elevacion_m", "fecha", "wind_speed_mean_ms", "wind_direction_mean_deg",
-        "temperatura_mean_c", "humedad_mean_pct", "presion_mean_hpa",
-        "ghi_mean_wm2", "fuente_datos",
+        "estacion",
+        "nombre",
+        "region",
+        "longitud",
+        "latitud",
+        "elevacion_m",
+        "fecha",
+        "wind_speed_mean_ms",
+        "wind_direction_mean_deg",
+        "temperatura_mean_c",
+        "humedad_mean_pct",
+        "presion_mean_hpa",
+        "ghi_mean_wm2",
+        "fuente_datos",
     ]
 
     for col in column_order:
@@ -352,7 +372,9 @@ def generate_metadata_report(dataset: pd.DataFrame) -> str:
     lines.append(f"Generado: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M')}\n")
 
     lines.append("## Cobertura por Estación\n")
-    lines.append("| Estación | Nombre | Región | Lat | Lon | Elev (m) | Inicio | Fin | Meses | Viento | Dir | Temp | HR | Pres | GHI |")
+    lines.append(
+        "| Estación | Nombre | Región | Lat | Lon | Elev (m) | Inicio | Fin | Meses | Viento | Dir | Temp | HR | Pres | GHI |"
+    )
     lines.append("|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|")
 
     for estacion, grp in dataset.groupby("estacion"):
@@ -375,7 +397,9 @@ def generate_metadata_report(dataset: pd.DataFrame) -> str:
     lines.append("\n## Estadísticas Globales\n")
     lines.append(f"- **Estaciones totales:** {dataset['estacion'].nunique()}")
     lines.append(f"- **Registros mensuales totales:** {len(dataset)}")
-    lines.append(f"- **Rango temporal:** {dataset['fecha'].min().strftime('%Y-%m')} → {dataset['fecha'].max().strftime('%Y-%m')}")
+    lines.append(
+        f"- **Rango temporal:** {dataset['fecha'].min().strftime('%Y-%m')} → {dataset['fecha'].max().strftime('%Y-%m')}"
+    )
 
     for col, label in [
         ("wind_speed_mean_ms", "Velocidad de viento [m/s]"),
@@ -387,7 +411,9 @@ def generate_metadata_report(dataset: pd.DataFrame) -> str:
     ]:
         series = dataset[col].dropna()
         if len(series) > 0:
-            lines.append(f"- **{label}:** μ = {series.mean():.1f}, σ = {series.std():.1f}, min = {series.min():.1f}, max = {series.max():.1f} (n = {len(series)})")
+            lines.append(
+                f"- **{label}:** μ = {series.mean():.1f}, σ = {series.std():.1f}, min = {series.min():.1f}, max = {series.max():.1f} (n = {len(series)})"
+            )
         else:
             lines.append(f"- **{label}:** sin datos")
 

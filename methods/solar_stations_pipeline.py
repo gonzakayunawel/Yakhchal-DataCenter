@@ -21,7 +21,7 @@ EXCEL_PATH = DATA_DIR / "Estaciones de Medición Solar.xlsx"
 CACHE_DIR = DATA_DIR / "solar_stations"
 CATALOG_PATH = DATA_DIR / "station_catalog.csv"
 DATASET_PATH = DATA_DIR / "dataset_solar_mensual.csv"
-DATASET_MD_PATH = DATA_DIR / "dataset_solar_mensual.md"
+DATASET_MD_PATH = ROOT / "docs" / "datasets" / "dataset_solar_mensual.md"
 
 
 def parse_station_sheet(ws) -> dict:
@@ -40,7 +40,11 @@ def parse_station_sheet(ws) -> dict:
 
     name = ""
     for r in ws.iter_rows(min_row=1, max_row=ws.max_row, max_col=2, values_only=True):
-        if r[0] and "estación:" in str(r[0]).lower() and "código" not in str(r[0]).lower():
+        if (
+            r[0]
+            and "estación:" in str(r[0]).lower()
+            and "código" not in str(r[0]).lower()
+        ):
             name = str(r[0]).split(":", 1)[-1].strip()
             break
 
@@ -62,7 +66,9 @@ def parse_station_sheet(ws) -> dict:
             break
 
     fecha_inicio, fecha_fin = "", ""
-    match = re.search(r"desde\s+(\d{1,2}-\d{1,2}-\d{4})\s+hasta\s+(\d{1,2}-\d{1,2}-\d{4})", dates_str)
+    match = re.search(
+        r"desde\s+(\d{1,2}-\d{1,2}-\d{4})\s+hasta\s+(\d{1,2}-\d{1,2}-\d{4})", dates_str
+    )
     if match:
         fecha_inicio = match.group(1)
         fecha_fin = match.group(2)
@@ -104,7 +110,7 @@ def _parse_numeric(val):
     """Try to parse a numeric value, return None on failure."""
     try:
         return float(val)
-    except (ValueError, TypeError):
+    except ValueError, TypeError:
         return None
 
 
@@ -128,7 +134,9 @@ def download_csv(url: str, dest: Path, retries: int = 3, delay: float = 2.0) -> 
     """Download a CSV file to dest, with retries. Returns True on success."""
     for attempt in range(retries):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "Yakhchal-DataCenter/0.1"})
+            req = urllib.request.Request(
+                url, headers={"User-Agent": "Yakhchal-DataCenter/0.1"}
+            )
             with urllib.request.urlopen(req, timeout=60) as resp:
                 data = resp.read()
             dest.write_bytes(data)
@@ -202,7 +210,9 @@ def normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
             time_col = c
             break
 
-    subset_cols = [time_col] + list(mapping.keys()) if time_col else list(mapping.keys())
+    subset_cols = (
+        [time_col] + list(mapping.keys()) if time_col else list(mapping.keys())
+    )
     df_sub = df[subset_cols].copy()
 
     df_sub = df_sub.rename(columns=mapping)
@@ -281,7 +291,9 @@ def consolidate(catalog: pd.DataFrame, cached_paths: dict) -> pd.DataFrame:
 
         monthly = monthly.reset_index().rename(columns={"timestamp": "fecha"})
         all_records.append(monthly)
-        print(f"  {len(monthly)} meses procesados ({monthly['fecha'].min().strftime('%Y-%m')} → {monthly['fecha'].max().strftime('%Y-%m')})")
+        print(
+            f"  {len(monthly)} meses procesados ({monthly['fecha'].min().strftime('%Y-%m')} → {monthly['fecha'].max().strftime('%Y-%m')})"
+        )
 
     if not all_records:
         raise RuntimeError("No se procesó ninguna estación")
@@ -289,9 +301,18 @@ def consolidate(catalog: pd.DataFrame, cached_paths: dict) -> pd.DataFrame:
     final = pd.concat(all_records, ignore_index=True)
 
     column_order = [
-        "estacion", "nombre", "region", "longitud", "latitud",
-        "elevacion_m", "fecha", "ghi_mean_wm2", "dni_mean_wm2",
-        "temperatura_mean_c", "humedad_mean_pct", "viento_mean_ms",
+        "estacion",
+        "nombre",
+        "region",
+        "longitud",
+        "latitud",
+        "elevacion_m",
+        "fecha",
+        "ghi_mean_wm2",
+        "dni_mean_wm2",
+        "temperatura_mean_c",
+        "humedad_mean_pct",
+        "viento_mean_ms",
         "fuente_datos",
     ]
 
@@ -312,7 +333,9 @@ def generate_metadata_report(dataset: pd.DataFrame) -> str:
     lines.append(f"Generado: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M')}\n")
 
     lines.append("## Cobertura por Estación\n")
-    lines.append("| Estación | Nombre | Región | Lat | Lon | Elev (m) | Inicio | Fin | Meses | GHI | DNI | Temp | HR | Viento |")
+    lines.append(
+        "| Estación | Nombre | Región | Lat | Lon | Elev (m) | Inicio | Fin | Meses | GHI | DNI | Temp | HR | Viento |"
+    )
     lines.append("|---|---|---|---|---|---|---|---|---|---|---|---|---|")
 
     for estacion, grp in dataset.groupby("estacion"):
@@ -338,7 +361,9 @@ def generate_metadata_report(dataset: pd.DataFrame) -> str:
     lines.append("\n## Estadísticas Globales\n")
     lines.append(f"- **Estaciones totales:** {dataset['estacion'].nunique()}")
     lines.append(f"- **Registros mensuales totales:** {len(dataset)}")
-    lines.append(f"- **Rango temporal:** {dataset['fecha'].min().strftime('%Y-%m')} → {dataset['fecha'].max().strftime('%Y-%m')}")
+    lines.append(
+        f"- **Rango temporal:** {dataset['fecha'].min().strftime('%Y-%m')} → {dataset['fecha'].max().strftime('%Y-%m')}"
+    )
 
     for col, label in [
         ("ghi_mean_wm2", "GHI [W/m²]"),
@@ -349,7 +374,9 @@ def generate_metadata_report(dataset: pd.DataFrame) -> str:
     ]:
         series = dataset[col].dropna()
         if len(series) > 0:
-            lines.append(f"- **{label}:** μ = {series.mean():.1f}, σ = {series.std():.1f}, min = {series.min():.1f}, max = {series.max():.1f} (n = {len(series)})")
+            lines.append(
+                f"- **{label}:** μ = {series.mean():.1f}, σ = {series.std():.1f}, min = {series.min():.1f}, max = {series.max():.1f} (n = {len(series)})"
+            )
         else:
             lines.append(f"- **{label}:** sin datos")
 

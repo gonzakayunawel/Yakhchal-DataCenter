@@ -20,7 +20,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 DATASET_PATH = DATA_DIR / "curtailment_acumulado.csv"
-DATASET_MD_PATH = DATA_DIR / "curtailment_acumulado.md"
+DATASET_MD_PATH = ROOT / "docs" / "datasets" / "curtailment_acumulado.md"
 
 SHEET_TIPO = {
     "Acumulado-Anual-Solar": "Solar",

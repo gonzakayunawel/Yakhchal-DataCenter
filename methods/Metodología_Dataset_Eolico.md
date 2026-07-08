@@ -115,7 +115,7 @@ Se detectaron valores físicamente imposibles en algunas estaciones, atribuibles
 2.  Se incorporan las columnas de metadatos: `estacion`, `nombre`, `region`, `longitud`, `latitud`, `elevacion_m`, `fuente_datos`.
 3.  Se reordenan las columnas al formato canónico especificado.
 4.  El dataset resultante se exporta a `data/dataset_eolico_mensual.csv`.
-5.  Se genera un archivo de metadatos en formato Markdown (`data/dataset_eolico_mensual.md`).
+5.  Se genera un archivo de metadatos en formato Markdown (`docs/datasets/dataset_eolico_mensual.md`).
 
 ---
 
@@ -175,7 +175,7 @@ El pipeline es **idempotente**: si los CSVs ya fueron descargados, solo re-ejecu
 |:---|:---|
 | `data/station_catalog_wind.csv` | Catálogo de 43 estaciones |
 | `data/dataset_eolico_mensual.csv` | Dataset consolidado de medias mensuales |
-| `data/dataset_eolico_mensual.md` | Reporte de cobertura y estadísticas |
+| `docs/datasets/dataset_eolico_mensual.md` | Reporte de cobertura y estadísticas |
 | `data/wind_stations/*.csv` | Caché local de datos crudos |
 
 ---
