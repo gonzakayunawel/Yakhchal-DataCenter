@@ -18,9 +18,9 @@
 | 0 | Ordenamiento del repositorio | ✅ Hecho |
 | 1 | QC y limpieza de datasets | ✅ Hecho |
 | 2 | Etapa 0 — Precómputo de coeficientes | ✅ Hecho |
-| 3 | Índice CAI (curtailment) | ⬜ Pendiente |
-| 4 | Etapa 1 — Modelo MILP | ⬜ Pendiente |
-| 5 | Experimentos y análisis de sensibilidad | ⬜ Pendiente |
+| 3 | Índice CAI (curtailment) | ✅ Hecho |
+| 4 | Etapa 1 — Modelo MILP | ✅ Hecho |
+| 5 | Experimentos y análisis de sensibilidad | ✅ Hecho |
 | 6 | Figuras y tablas | ⬜ Pendiente |
 | 7 | Verificación de bibliografía | ⬜ Pendiente |
 | 8 | Redacción del paper (.qmd) | ⬜ Pendiente |
@@ -88,11 +88,11 @@ Bundles: `H_RAD` (radiativo, Aili), `H_ECO` (economizador/IEC, Silva-Llanca + Ya
 
 Script nuevo: `methods/cai_pipeline.py`. Entrada: `data/curtailment_acumulado.csv` + coordenadas de sitios candidatos. Salida: `results/cai_por_sitio.csv`.
 
-- [ ] 3.1 Implementar distancia de Haversine entre cada sitio i y las 100 plantas georreferenciadas.
-- [ ] 3.2 Implementar CAI_i = Σ_j C_j · exp(−d_ij/d0) con `d0` parametrizable. Calcular para d0 ∈ {20, 50, 100} km.
-- [ ] 3.3 Versión desagregada: CAI solar y CAI eólico por separado (columnas adicionales).
-- [ ] 3.4 Redactar (para uso en Fase 8) la **justificación de d0 como parámetro**: proximidad geodésica como proxy de factibilidad de interconexión; el análisis de sensibilidad sobre d0 sustituye el dato real del ECTD-2022; citar el ECTD-2022 como la fuente que cerraría la brecha en trabajo futuro. Guardar borrador en `docs/feasibility/justificacion_d0.md`.
-- [ ] 3.5 Verificación: ranking de sitios por CAI debe ser estable ante los tres valores de d0 (o documentar dónde cambia y por qué — eso mismo es un resultado del paper). Confirmar que el 25 % de plantas sin coordenadas (mayoritariamente eólicas del sur) no afecta la zona de estudio; cuantificar el % del curtailment total que sí está georreferenciado en las regiones XV–IV.
+- [x] 3.1 Implementar distancia de Haversine entre cada sitio i y las 100 plantas georreferenciadas.
+- [x] 3.2 Implementar CAI_i = Σ_j C_j · exp(−d_ij/d0) con `d0` parametrizable. Calcular para d0 ∈ {20, 50, 100} km.
+- [x] 3.3 Versión desagregada: CAI solar y CAI eólico por separado (columnas adicionales).
+- [x] 3.4 Redactar (para uso en Fase 8) la **justificación de d0 como parámetro**: proximidad geodésica como proxy de factibilidad de interconexión; el análisis de sensibilidad sobre d0 sustituye el dato real del ECTD-2022; citar el ECTD-2022 como la fuente que cerraría la brecha en trabajo futuro. Guardar borrador en `docs/feasibility/justificacion_d0.md`.
+- [x] 3.5 Verificación: ranking de sitios por CAI debe ser estable ante los tres valores de d0 (o documentar dónde cambia y por qué — eso mismo es un resultado del paper). Confirmar que el 25 % de plantas sin coordenadas (mayoritariamente eólicas del sur) no afecta la zona de estudio; cuantificar el % del curtailment total que sí está georreferenciado en las regiones XV–IV.
 
 **Done cuando:** `results/cai_por_sitio.csv` con CAI total/solar/eólico × 3 valores de d0, y la justificación de d0 redactada.
 
@@ -102,20 +102,20 @@ Script nuevo: `methods/cai_pipeline.py`. Entrada: `data/curtailment_acumulado.cs
 
 Script nuevo: `methods/milp_model.py` con PuLP (ya en dependencias). Especificación: secciones 1–6 de `docs/Idea_discusion.md`.
 
-- [ ] 4.1 Cargar parámetros desde `results/etapa0_coeficientes.csv` y `results/cai_por_sitio.csv`. Ningún número mágico embebido: todo parámetro de diseño (L, P, Budget, precios, pesos) en un bloque de configuración único o archivo de configuración.
-- [ ] 4.2 Fijar parámetros de diseño con justificación documentada:
+- [x] 4.1 Cargar parámetros desde `results/etapa0_coeficientes.csv` y `results/cai_por_sitio.csv`. Ningún número mágico embebido: todo parámetro de diseño (L, P, Budget, precios, pesos) en un bloque de configuración único o archivo de configuración.
+- [x] 4.2 Fijar parámetros de diseño con justificación documentada:
   - L (carga IT, kW): proponer 1 MW (datacenter modular pequeño) — documentar.
   - p_energy, p_water: valores de referencia chilenos (costo marginal zona norte / tarifas de agua industrial) — si no hay fuente sólida, valores ilustrativos declarados.
   - CAPEX_h: valores proxy desde PNNL-24904 (`docs/feasibility/Data CAPEX.md`) + literatura, **declarados como proxy de edificios comerciales, no datacenters**.
   - P (número de sitios) y Budget: escenarios, no valores únicos.
-- [ ] 4.3 Implementar variables (x_i, y_ih binarias), restricciones R1–R7 y dominio, exactamente como la especificación. R6 y R7 como opcionales activables por configuración (R7 queda inactiva por defecto: sin datos DGA reales, se documenta como estructura preparada).
-- [ ] 4.4 Implementar la función objetivo normalizada min-max con pesos (α, β, γ).
-- [ ] 4.5 Salida: `results/milp_solucion_<escenario>.csv` (sitios seleccionados, bundle asignado, valores de objetivo desagregados) + log del solver.
-- [ ] 4.6 Verificación del modelo:
+- [x] 4.3 Implementar variables (x_i, y_ih binarias), restricciones R1–R7 y dominio, exactamente como la especificación. R6 y R7 como opcionales activables por configuración (R7 queda inactiva por defecto: sin datos DGA reales, se documenta como estructura preparada).
+- [x] 4.4 Implementar la función objetivo normalizada min-max con pesos (α, β, γ).
+- [x] 4.5 Salida: `results/milp_solucion_<escenario>.csv` (sitios seleccionados, bundle asignado, valores de objetivo desagregados) + log del solver.
+- [x] 4.6 Verificación del modelo:
   - Caso trivial: P=1, un solo bundle factible → solución obvia a mano, el solver debe coincidir.
   - Extremos de pesos: α=1 (solo costo) debe elegir el bundle más barato; β=1 (solo agua) el de menor WUE; γ=1 (solo CAI) el sitio con mayor CAI. Verificar los tres.
   - Infactibilidad controlada: Budget demasiado bajo debe reportar infactible, no una solución absurda.
-- [ ] 4.7 `ruff check` + `ruff format`.
+- [x] 4.7 `ruff check` + `ruff format`.
 
 **Done cuando:** los tres tests de 4.6 pasan y el modelo resuelve el caso base en segundos.
 
@@ -123,14 +123,14 @@ Script nuevo: `methods/milp_model.py` con PuLP (ya en dependencias). Especificac
 
 ## Fase 5 — Experimentos y análisis de sensibilidad
 
-- [ ] 5.1 Definir la grilla experimental (documentarla en `results/experimentos.md`):
+- [x] 5.1 Definir la grilla experimental (documentarla en `results/experimentos.md`):
   - Barrido de pesos (α, β, γ) sobre el simplex (paso 0.1) → frontera de Pareto aproximada.
   - Sensibilidad a d0 ∈ {20, 50, 100} km.
   - Escenarios de P ∈ {1, 2, 3} sitios.
   - (Opcional) Sensibilidad a CAPEX ±50 % dada la debilidad del proxy.
-- [ ] 5.2 Script `methods/experimentos.py` que corre la grilla y consolida en `results/experimentos_consolidado.csv`.
-- [ ] 5.3 Análisis: identificar (a) sitios que aparecen en toda la frontera (robustos), (b) puntos de quiebre donde cambia la selección, (c) efecto de d0 en el ranking. Estas tres cosas son el corazón de la sección de Resultados.
-- [ ] 5.4 Verificación de coherencia: los resultados deben ser explicables con los datos de entrada (p.ej., si un sitio domina, debe ser trazable a su clima o su CAI). Cualquier resultado contraintuitivo se investiga antes de reportarlo.
+- [x] 5.2 Script `methods/experimentos.py` que corre la grilla y consolida en `results/experimentos_consolidado.csv`.
+- [x] 5.3 Análisis: identificar (a) sitios que aparecen en toda la frontera (robustos), (b) puntos de quiebre donde cambia la selección, (c) efecto de d0 en el ranking. Estas tres cosas son el corazón de la sección de Resultados.
+- [x] 5.4 Verificación de coherencia: los resultados deben ser explicables con los datos de entrada (p.ej., si un sitio domina, debe ser trazable a su clima o su CAI). Cualquier resultado contraintuitivo se investiga antes de reportarlo.
 
 **Done cuando:** `results/experimentos_consolidado.csv` completo y los tres hallazgos de 5.3 redactados en borrador.
 
