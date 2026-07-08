@@ -29,3 +29,6 @@ snowflake.log
 data/output/
 data/output*.zip
 
+# Experiment results and figures
+results/
+figures/
