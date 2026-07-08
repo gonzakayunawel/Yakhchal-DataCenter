@@ -21,7 +21,7 @@
 | 3 | Índice CAI (curtailment) | ✅ Hecho |
 | 4 | Etapa 1 — Modelo MILP | ✅ Hecho |
 | 5 | Experimentos y análisis de sensibilidad | ✅ Hecho |
-| 6 | Figuras y tablas | ⬜ Pendiente |
+| 6 | Figuras y tablas | ✅ Hecho |
 | 7 | Verificación de bibliografía | ⬜ Pendiente |
 | 8 | Redacción del paper (.qmd) | ⬜ Pendiente |
 | 9 | Render final y revisión de cierre | ⬜ Pendiente |
@@ -140,13 +140,13 @@ Script nuevo: `methods/milp_model.py` con PuLP (ya en dependencias). Especificac
 
 Todas las figuras generadas por script (`methods/figuras.py`), reproducibles, guardadas en `figures/` como PDF (para XeLaTeX) o PNG de alta resolución.
 
-- [ ] 6.1 **Mapa de estudio:** norte de Chile con sitios candidatos (estaciones) y plantas con curtailment (tamaño ∝ MWh, color por tecnología).
-- [ ] 6.2 **Climatología comparada:** T_db, HR, T_wb mensuales por sitio (paneles o heatmap), con los umbrales de screening superpuestos.
-- [ ] 6.3 **Coeficientes Etapa 0:** PUE y WUE por sitio × bundle (barras agrupadas o heatmap).
-- [ ] 6.4 **CAI:** ranking de sitios con las tres curvas de d0.
-- [ ] 6.5 **Frontera de Pareto:** costo vs. agua vs. CAI (2D con color, o pares de proyecciones).
-- [ ] 6.6 **Tabla de solución:** sitios seleccionados y bundle por escenario.
-- [ ] 6.7 Tablas del paper: síntesis de fuentes (adaptar tabla H de `Idea_discusion.md`), parámetros del modelo con fuente/supuesto, resumen de datasets.
+- [x] 6.1 **Mapa de estudio:** norte de Chile con sitios candidatos (estaciones) y plantas con curtailment (tamaño ∝ MWh, color por tecnología).
+- [x] 6.2 **Climatología comparada:** T_db, HR, T_wb mensuales por sitio (paneles o heatmap), con los umbrales de screening superpuestos.
+- [x] 6.3 **Coeficientes Etapa 0:** PUE y WUE por sitio × bundle (barras agrupadas o heatmap).
+- [x] 6.4 **CAI:** ranking de sitios con las tres curvas de d0.
+- [x] 6.5 **Frontera de Pareto:** costo vs. agua vs. CAI (2D con color, o pares de proyecciones).
+- [x] 6.6 **Tabla de solución:** sitios seleccionados y bundle por escenario.
+- [x] 6.7 Tablas del paper: síntesis de fuentes (adaptar tabla H de `Idea_discusion.md`), parámetros del modelo con fuente/supuesto, resumen de datasets.
 
 **Done cuando:** todas las figuras se regeneran con un solo comando y son legibles en el tamaño de columna IEEE.
 
