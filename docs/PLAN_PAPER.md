@@ -22,7 +22,7 @@
 | 4 | Etapa 1 — Modelo MILP | ✅ Hecho |
 | 5 | Experimentos y análisis de sensibilidad | ✅ Hecho |
 | 6 | Figuras y tablas | ✅ Hecho |
-| 7 | Verificación de bibliografía | ⬜ Pendiente |
+| 7 | Verificación de bibliografía | ✅ Hecho |
 | 8 | Redacción del paper (.qmd) | ⬜ Pendiente |
 | 9 | Render final y revisión de cierre | ⬜ Pendiente |
 
@@ -156,7 +156,7 @@ Todas las figuras generadas por script (`methods/figuras.py`), reproducibles, gu
 
 Los documentos de `docs/feasibility/` son salidas de Perplexity con URLs corruptas comprobadas. **Ninguna cita entra al paper sin verificar contra el documento original.**
 
-- [ ] 7.1 Verificar y agregar a `docs/ieee-paper/refs.bib` (vía Zotero, según convención del proyecto):
+- [x] 7.1 Verificar y agregar a `docs/ieee-paper/refs.bib` (vía Zotero, según convención del proyecto):
   - EnergyPlus Engineering Reference — modelo de agua de enfriadores evaporativos (Brecha 7).
   - PNNL-24904, Fernandez et al. 2015 (Brecha 3 — CAPEX proxy).
   - ECTD-2022, Coordinador Eléctrico Nacional (Brecha 4 — citado como trabajo futuro).
@@ -164,8 +164,8 @@ Los documentos de `docs/feasibility/` son salidas de Perplexity con URLs corrupt
   - SNASPE/SEIA — capas de áreas protegidas (Brecha 8 — citado como screening futuro).
   - Leroy et al. 2019, *Science Advances* 5(10):eaat9480 — validación empírica radiativo en Atacama (Brecha 6). **Ojo:** las URLs del doc de feasibility están rotas; buscar el DOI real.
   - Fuentes de los datasets propios: reportes de curtailment del CEN, red de medición walker.dgf.uchile.cl (Ministerio de Energía / U. de Chile).
-- [ ] 7.2 Confirmar que los 5 papers ya presentes en `refs.bib` tienen metadatos completos (DOI, páginas).
-- [ ] 7.3 Verificar que cada claim del paper que dependa de una fuente de feasibility esté respaldado por el documento original, no por el resumen de Perplexity (en particular: ecuaciones de EnergyPlus y cifras de CAPEX de PNNL).
+- [x] 7.2 Confirmar que los 5 papers ya presentes en `refs.bib` tienen metadatos completos (DOI, páginas).
+- [x] 7.3 Verificar que cada claim del paper que dependa de una fuente de feasibility esté respaldado por el documento original, no por el resumen de Perplexity (en particular: ecuaciones de EnergyPlus y cifras de CAPEX de PNNL).
 
 **Done cuando:** `refs.bib` completo y cada entrada verificada contra su fuente original.
 
