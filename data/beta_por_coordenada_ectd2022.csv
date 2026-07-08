@@ -1,0 +1,6 @@
+latitud,longitud,beta,zona,ctd_MW,explicacion
+-23.5,-69.5,0.76,Norte,150,"coordenadas (-23.50, -69.50) -> zona Norte. beta = 0.76 (76% Norte, 42% Centro, 29% Sur instalaciones con CTD >100 MW). CTD estimado = 150 MW para generacion."
+-33.5,-70.5,0.42,Centro,50,"coordenadas (-33.50, -70.50) -> zona Centro. beta = 0.42 (76% Norte, 42% Centro, 29% Sur instalaciones con CTD >100 MW). CTD estimado = 50 MW para generacion."
+-45.0,-72.0,0.29,Sur,8,"coordenadas (-45.00, -72.00) -> zona Sur. beta = 0.29 (76% Norte, 42% Centro, 29% Sur instalaciones con CTD >100 MW). CTD estimado = 8 MW para generacion."
+-20.5,-70.5,0.76,Norte,150,"coordenadas (-20.50, -70.50) -> zona Norte. beta = 0.76 (76% Norte, 42% Centro, 29% Sur instalaciones con CTD >100 MW). CTD estimado = 150 MW para generacion."
+-27.5,-70.0,0.76,Norte,150,"coordenadas (-27.50, -70.00) -> zona Norte. beta = 0.76 (76% Norte, 42% Centro, 29% Sur instalaciones con CTD >100 MW). CTD estimado = 150 MW para generacion."
