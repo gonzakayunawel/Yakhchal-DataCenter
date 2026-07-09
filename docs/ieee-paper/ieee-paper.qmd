@@ -5,7 +5,7 @@ authors:
     email: "g.cayunaoerices@uandresbello.edu"
     affiliations:
       - name: "Universidad Andrés Bello"
-        department: "Programa Doctoral en Sistemas Avanzados (DISA)"
+        department: "Doctorado en Ingeniería de Sistemas Avanzados (DISA)"
         city: "Santiago"
         country: "Chile"
 abstract: |
@@ -36,7 +36,7 @@ Las principales contribuciones de este trabajo son:
 
 ## Trabajo Relacionado
 
-La optimización de datacenters ha sido abordada extensamente. Aili et al. [-@AILI2024122672] demostraron el potencial del enfriamiento radiativo pasivo (`H_RAD`) para disipar calor hacia el espacio exterior a través de la ventana de transparencia atmosférica (8–13 $\mu$m), especialmente en climas extremadamente secos con bajo vapor de agua precipitable (PW). Silva-Llanca et al. [-@silva-llancaImprovingEnergyWater2023] y Yang et al. [-@yangClimaticApplicabilityIndirect2023] analizaron el potencial del enfriamiento gratuito por aire indirecto (IEC, `H_ECO`) y definieron umbrales empíricos de bulbo seco ($T_{db}$) y bulbo húmedo ($T_{wb}$) para conmutar entre modos seco, húmedo y mixto. Finalmente, Lei y Masanet [-@leiClimateTechnologyspecificPUE2022] establecieron un marco termodinámico para acoplar el PUE (Power Usage Effectiveness) y el WUE (Water Usage Effectiveness), validando configuraciones híbridas y chiller convencionales (`H_CONV`). Siriwardana et al. [-@siriwardanaPotentialAirsideEconomizers2013] cuantificaron previamente el potencial climático de los economizadores de aire a escala continental, metodología que motiva el uso de climatologías mensuales en este trabajo. Por su parte, Leroy et al. [-@Leroy2019] demostraron experimentalmente enfriamiento radiativo sub-ambiente durante el día en el propio Desierto de Atacama usando aerogel de polietileno, aportando el único respaldo empírico local — a escala de material, no de sistema — para la tecnología `H_RAD`.
+La optimización de datacenters ha sido abordada extensamente. Aili et al. [-@AILI2024122672] demostraron el potencial del enfriamiento radiativo pasivo (`H_RAD`) para disipar calor hacia el espacio exterior a través de la ventana de transparencia atmosférica (8–13 $\mu$m), especialmente en climas extremadamente secos con bajo vapor de agua precipitable (PW). Silva-Llanca et al. [-@silva-llancaImprovingEnergyWater2023] y Yang et al. [-@yangClimaticApplicabilityIndirect2023] analizaron el potencial del *free-cooling* por aire indirecto (IEC, `H_ECO`) y definieron umbrales empíricos de bulbo seco ($T_{db}$) y bulbo húmedo ($T_{wb}$) para conmutar entre modos seco, húmedo y mixto. Finalmente, Lei y Masanet [-@leiClimateTechnologyspecificPUE2022] establecieron un marco termodinámico para acoplar el PUE (Power Usage Effectiveness) y el WUE (Water Usage Effectiveness), validando configuraciones híbridas y chiller convencionales (`H_CONV`). Siriwardana et al. [-@siriwardanaPotentialAirsideEconomizers2013] cuantificaron previamente el potencial climático de los economizadores de aire a escala continental, metodología que motiva el uso de climatologías mensuales en este trabajo. Por su parte, Leroy et al. [-@Leroy2019] demostraron experimentalmente enfriamiento radiativo sub-ambiente durante el día en el propio Desierto de Atacama usando aerogel de polietileno, aportando el único respaldo empírico local — a escala de material, no de sistema — para la tecnología `H_RAD`.
 
 La @tbl-fuentes sintetiza el aporte de cada fuente y su uso en este trabajo.
 
