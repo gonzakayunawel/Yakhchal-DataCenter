@@ -1,7 +1,7 @@
 ---
 title: "Optimización Multiobjetivo para la Localización y Selección Tecnológica de Datacenters en el Desierto de Atacama"
 authors:
-  - name: "Gonzalo Cayunao Erices"
+  - name: "Gonzalo Cayunao-Erices"
     email: "g.cayunaoerices@uandresbello.edu"
     affiliations:
       - name: "Universidad Andrés Bello"

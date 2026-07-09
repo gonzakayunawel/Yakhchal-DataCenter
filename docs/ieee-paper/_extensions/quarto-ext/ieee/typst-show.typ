@@ -15,7 +15,7 @@ $for(it.affiliations/first)$
       organization: [$it.name$],
       location: [$it.city$, $it.country$],
 $endfor$
-      email: "$it.email$",
+      email: [$it.email$],
     ),
 $endfor$
   ),
