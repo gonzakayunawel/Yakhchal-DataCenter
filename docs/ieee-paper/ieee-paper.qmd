@@ -25,7 +25,7 @@ lang: es
 
 ## Introducción
 
-El crecimiento del cómputo en la nube y la inteligencia artificial ha impulsado una expansión sin precedentes de la infraestructura de centros de datos (datacenters) a nivel global. Sin embargo, estas instalaciones consumen ingentes cantidades de electricidad y agua dulce para refrigerar los servidores. El Desierto de Atacama en Chile se perfila como un laboratorio natural óptimo para albergar estas instalaciones debido a su extraordinaria irradiancia solar y cielos despejados, ideales para la autogeneración fotovoltaica y tecnologías avanzadas de enfriamiento pasivo. No obstante, la extrema escasez hídrica de la región impone severas restricciones éticas y operativas al uso de agua.
+El crecimiento del cómputo en la nube y la inteligencia artificial ha impulsado una expansión sin precedentes de la infraestructura de centros de datos (datacenters) a nivel global. Sin embargo, estas instalaciones consumen ingentes cantidades de electricidad y agua dulce para su operación y mantenimiento. El Desierto de Atacama en Chile se perfila como un laboratorio natural óptimo para albergar estas instalaciones debido a su extraordinaria irradiancia solar y cielos despejados, ideales para la autogeneración fotovoltaica y tecnologías avanzadas de enfriamiento pasivo. No obstante, la extrema escasez hídrica de la región impone severas restricciones éticas y operativas al uso de agua.
 
 Este artículo aborda el problema de localización y selección tecnológica óptima de datacenters mediante un enfoque multiobjetivo lineal entero-mixto (MILP) en dos etapas. A diferencia de estudios previos enfocados puramente en la eficiencia térmica o energética, integramos la sostenibilidad energética sistémica utilizando datos georreferenciados de *curtailment* (vertimiento) de energías renovables no convencionales (ERNC). La hipótesis central es que es posible co-localizar datacenters en zonas con altos excedentes de energía que actualmente se pierden por congestión en la transmisión, minimizando simultáneamente el costo total anualizado y el consumo hídrico local.
 
@@ -33,6 +33,7 @@ Las principales contribuciones de este trabajo son:
 1. La formulación de un modelo de dos etapas acoplado termodinámicamente para precomputar coeficientes climáticos y operacionales.
 2. La definición del Índice de Disponibilidad de Curtailment (CAI) utilizando kernels de decaimiento geodésico.
 3. La resolución del problema de portafolio óptimo para el norte de Chile utilizando el solver industrial Gurobi.
+4. La consideración de la disponibilidad espacial de curtailment renovable como criterio de localización territorial.
 
 ## Trabajo Relacionado
 
