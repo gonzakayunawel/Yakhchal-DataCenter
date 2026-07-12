@@ -45,8 +45,10 @@ def plot_mapa():
         subset=["latitud", "longitud"]
     )
     stat = pd.read_csv(DATA_DIR / "station_catalog.csv")
+    # Crucero II se excluye del catálogo (misma ubicación que CRUC; ver sección IV)
+    stat = stat[stat["codigo"] != "Crucero2"]
 
-    fig, ax = plt.subplots(figsize=(6, 8))
+    fig, ax = plt.subplots(figsize=(8, 8))
 
     # Graficar plantas con curtailment
     solar = curt[curt["tipo"] == "Solar"]
@@ -84,13 +86,16 @@ def plot_mapa():
         zorder=5,
     )
 
-    # Annotations for candidate sites
+    # Annotations for candidate sites; CRUC va a la izquierda para no chocar con SLAR
+    label_offsets = {"CRUC": ((-7, 2), "right")}
     for _, row in stat.iterrows():
+        xytext, ha = label_offsets.get(row["codigo"], ((5, 2), "left"))
         ax.annotate(
             row["codigo"],
             (row["longitud"], row["latitud"]),
             textcoords="offset points",
-            xytext=(5, 2),
+            xytext=xytext,
+            ha=ha,
             fontsize=8,
             weight="bold",
         )
@@ -98,7 +103,7 @@ def plot_mapa():
     ax.set_title("Norte de Chile: Sitios Candidatos y Curtailment")
     ax.set_xlabel("Longitud (°W)")
     ax.set_ylabel("Latitud (°S)")
-    ax.legend(loc="upper right", frameon=True)
+    ax.legend(loc="upper left", bbox_to_anchor=(1.02, 1.0), frameon=True)
     ax.set_aspect("equal", adjustable="box")
 
     plt.tight_layout()
