@@ -31,9 +31,8 @@ Este artículo aborda el problema de localización y selección tecnológica óp
 
 Las principales contribuciones de este trabajo son:
 1. La formulación de un modelo de dos etapas acoplado termodinámicamente para precomputar coeficientes climáticos y operacionales.
-2. La definición del Índice de Disponibilidad de Curtailment (CAI) utilizando kernels de decaimiento geodésico.
+2. La definición del Índice de Disponibilidad de Curtailment (CAI) utilizando kernels de decaimiento geodésico como criterio de localización territorial.
 3. La resolución del problema de portafolio óptimo para el norte de Chile utilizando el solver industrial Gurobi.
-4. La consideración de la disponibilidad espacial de curtailment renovable como criterio de localización territorial.
 
 ## Trabajo Relacionado
 
@@ -167,7 +166,7 @@ La optimización revela que las regiones de Antofagasta e Inca de Oro presentan 
 ### Limitaciones declaradas
 
 - **CAPEX como proxy:** los costos de capital provienen de PNNL-24904 [@fernandez2015pnnl24904], un estudio de sistemas HVAC de edificios comerciales, no de datacenters. El análisis de sensibilidad de $\pm 50\%$ (Sección 5) muestra que las conclusiones son robustas a esta incertidumbre, pero las magnitudes absolutas de costo deben tratarse como ilustrativas.
-- **Extrapolación del modelo radiativo:** los coeficientes de `H_RAD` derivan del modelo de Aili et al. [@AILI2024122672], validado experimentalmente en el clima tropical de Singapur. Su aplicación al Atacama es una extrapolación, respaldada solo parcialmente por la demostración a escala de material de Leroy et al. [@Leroy2019]; no existe aún validación de un sistema radiativo completo operando en la región.
+- **Extrapolación del modelo radiativo:** los coeficientes de `H_RAD` derivan del modelo de Aili et al. [@AILI2024122672], desarrollado y evaluado mediante simulación con modelos físicos detallados para el clima tropical de Singapur, sin validación experimental de un sistema completo. Su aplicación al Atacama es una extrapolación, respaldada solo parcialmente por la demostración a escala de material de Leroy et al. [@Leroy2019]; no existe aún validación de un sistema radiativo completo operando en la región.
 - **Capacidad real de red:** el parámetro $d_0$ sustituye los datos de capacidad de interconexión del Estudio de Capacidad Técnica Disponible (ECTD-2022) del Coordinador Eléctrico Nacional [@ectd2022], que no fueron incorporados. El barrido $d_0 \in \{20, 50, 100\}$ km es la defensa metodológica de esta simplificación.
 - **Restricciones hídricas y territoriales:** la restricción de techo de agua por sitio (R7) está estructuralmente preparada pero inactiva por falta de datos de derechos de agua del Catastro Público de Aguas (DGA) [@dga2023]. Análogamente, el screening de áreas protegidas (SNASPE/SEIA) [@snaspe2023] queda como filtro territorial futuro.
 - **Resolución temporal mensual:** el modelo no captura dinámicas horarias transitorias de la red ni la coincidencia horaria entre curtailment y demanda del datacenter.
