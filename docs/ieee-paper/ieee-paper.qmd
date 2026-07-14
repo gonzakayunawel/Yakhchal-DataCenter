@@ -31,12 +31,12 @@ Este artículo aborda el problema de localización y selección tecnológica óp
 
 Las principales contribuciones de este trabajo son:
 1. La formulación de un modelo de dos etapas acoplado termodinámicamente para precomputar coeficientes climáticos y operacionales.
-2. La definición del Índice de Disponibilidad de Curtailment (CAI) utilizando kernels de decaimiento geodésico como criterio de localización territorial.
+2. La definición del Índice de Disponibilidad de Curtailment (CAI) utilizando *kernels* (funciones de núcleo) de decaimiento geodésico como criterio de localización territorial.
 3. La resolución del problema de portafolio óptimo para el norte de Chile utilizando el solver industrial Gurobi.
 
 ## Trabajo Relacionado
 
-La optimización de datacenters ha sido abordada extensamente. Shehabi et al. [-@shehabi2024] definieron la línea base actualizada del consumo energético agregado de datacenters en EE.UU. mediante un modelo *bottom-up*, utilizando las métricas PUE (Power Usage Effectiveness) y WUE (Water Usage Effectiveness) para caracterizar y proyectar los *trade-offs* de eficiencia térmica e hídrica de la infraestructura ante el impacto del auge de la IA Generativa. Aili et al. [-@AILI2024122672] demostraron el potencial del enfriamiento radiativo pasivo (`H_RAD`) para disipar calor hacia el espacio exterior a través de la ventana de transparencia atmosférica (8–13 $\mu$m), especialmente en climas extremadamente secos con bajo vapor de agua precipitable (PW). Silva-Llanca et al. [-@silva-llancaImprovingEnergyWater2023] y Yang et al. [-@yangClimaticApplicabilityIndirect2023] analizaron el potencial del *free-cooling* por aire indirecto (IEC, `H_ECO`) y definieron umbrales empíricos de bulbo seco ($T_{db}$) y bulbo húmedo ($T_{wb}$) para conmutar entre modos seco, húmedo y mixto. Finalmente, Lei y Masanet [-@leiClimateTechnologyspecificPUE2022] establecieron un marco termodinámico para acoplar el PUE y el WUE, validando configuraciones híbridas y chiller convencionales (`H_CONV`). Siriwardana et al. [-@siriwardanaPotentialAirsideEconomizers2013] cuantificaron previamente el potencial climático de los economizadores de aire a escala continental, metodología que motiva el uso de climatologías mensuales en este trabajo. Por su parte, Leroy et al. [-@leroyHighperformanceSubambientRadiative2019] demostraron experimentalmente enfriamiento radiativo sub-ambiente durante el día en el propio Desierto de Atacama usando aerogel de polietileno; esa demostración es el único respaldo empírico local (a escala de material, no de sistema) para la tecnología `H_RAD`.
+La optimización de datacenters ha sido abordada extensamente. Shehabi et al. [-@shehabi2024] definieron la línea base actualizada del consumo energético agregado de datacenters en EE.UU. mediante un modelo *bottom-up*, utilizando las métricas PUE (Power Usage Effectiveness) y WUE (Water Usage Effectiveness) para caracterizar y proyectar los *trade-offs* de eficiencia térmica e hídrica de la infraestructura ante el impacto del auge de la IA Generativa. Aili et al. [-@AILI2024122672] demostraron el potencial del enfriamiento radiativo pasivo (`H_RAD`) para disipar calor hacia el espacio exterior a través de la ventana de transparencia atmosférica (8–13 $\mu$m), especialmente en climas extremadamente secos con bajo vapor de agua precipitable (PW). Silva-Llanca et al. [-@silva-llancaImprovingEnergyWater2023] y Yang et al. [-@yangClimaticApplicabilityIndirect2023] analizaron el potencial del *free-cooling* por aire indirecto (IEC, `H_ECO`) y definieron umbrales empíricos de bulbo seco ($T_{db}$) y bulbo húmedo ($T_{wb}$) para conmutar entre modos seco, húmedo y mixto. Finalmente, Lei y Masanet [-@leiClimateTechnologyspecificPUE2022] establecieron un marco termodinámico para acoplar el PUE y el WUE, validando configuraciones híbridas y *chiller* convencionales (`H_CONV`). Siriwardana et al. [-@siriwardanaPotentialAirsideEconomizers2013] cuantificaron previamente el potencial climático de los economizadores de aire a escala continental, metodología que motiva el uso de climatologías mensuales en este trabajo. Por su parte, Leroy et al. [-@leroyHighperformanceSubambientRadiative2019] demostraron experimentalmente enfriamiento radiativo sub-ambiente durante el día en el propio Desierto de Atacama usando aerogel de polietileno; esa demostración es el único respaldo empírico local (a escala de material, no de sistema) para la tecnología `H_RAD`.
 
 La @tbl-fuentes sintetiza el aporte de cada fuente y su uso en este trabajo.
 
@@ -52,7 +52,7 @@ La @tbl-fuentes sintetiza el aporte de cada fuente y su uso en este trabajo.
 
 : Síntesis de fuentes y su rol en el modelo. {#tbl-fuentes}
 
-Este trabajo integra por primera vez para Chile el origen de la energía renovable vertida (*curtailment*) y los trade-offs de localización territorial en una única formulación de optimización multiobjetivo.
+Este trabajo integra por primera vez para Chile el origen de la energía renovable vertida (*curtailment*) y los *trade-offs* de localización territorial en una única formulación de optimización multiobjetivo.
 
 ## Datos y Limitaciones
 
@@ -65,7 +65,7 @@ Se consolidaron tres fuentes de datos principales para la zona norte del Sistema
 
 *Limitaciones declaradas:* Dado el carácter retrospectivo y la agregación mensual de los datos, el modelo no captura dinámicas horarias transitorias de la red, y trata la capacidad de red disponible como un parámetro de sensibilidad caracterizado por la distancia geodésica ($d_0$).
 
-![Mapa de estudio en las regiones XV (Arica-Parinacota), I (Tarapacá), II (Antofagasta), III (Atacama) y IV (Coquimbo) del norte de Chile. Se muestran los 10 sitios candidatos y las plantas de generación renovable con curtailment (tamaño proporcional al MWh vertido, color por tecnología: amarillo = solar, azul = eólica).](figures/fig_6_1_mapa.png){#fig-mapa width=70%}
+![Mapa de estudio en las regiones XV (Arica-Parinacota), I (Tarapacá), II (Antofagasta), III (Atacama) y IV (Coquimbo) del norte de Chile. Se muestran los 10 sitios candidatos y las plantas de generación renovable con *curtailment* (tamaño proporcional al MWh vertido, color por tecnología: amarillo = solar, azul = eólica).](figures/fig_6_1_mapa.png){#fig-mapa width=70%}
 
 ## Metodología
 
@@ -74,14 +74,14 @@ El marco de modelado opera en dos etapas jerárquicas:
 ### Etapa 0: Precómputo de Coeficientes Climáticos
 Para cada estación $i$ y mes, se calculó la presión atmosférica estándar ($P_i$) a partir de su altitud y la Temperatura de Bulbo Húmedo ($T_{wb,i}$) mediante la fórmula psicrométrica de Stull, válida para humedad relativa $\ge 5\%$ y temperaturas entre $-20$ y $50^\circ\text{C}$. En meses excepcionalmente secos (HR $< 5\%$, posible en el Desierto de Atacama), la precisión de la fórmula se degrada; para esos casos se utilizó $T_{wb}$ extrapolada desde la temperatura de punto de rocío como método alternativo, documentado en los scripts de preprocesamiento. El vapor de agua precipitable ($PW_i$) se estimó usando la presión de vapor actual de acuerdo a Aili et al. [@AILI2024122672]. 
 
-A partir de estas variables, se aplicaron filtros de screening climáticos ($z_i \in \{0, 1\}$) donde un sitio se considera apto si su humedad relativa promedio es $\le 60\%$, su temperatura de bulbo seco es $\le 20^\circ\text{C}$ y su $T_{wb}$ es $\le 19^\circ\text{C}$ en al menos el $50\%$ de los meses.
+A partir de estas variables, se aplicaron filtros de *screening* (pre-selección climática) ($z_i \in \{0, 1\}$) donde un sitio se considera apto si su humedad relativa promedio es $\le 60\%$, su temperatura de bulbo seco es $\le 20^\circ\text{C}$ y su $T_{wb}$ es $\le 19^\circ\text{C}$ en al menos el $50\%$ de los meses.
 
 Para cada uno de los cuatro *bundles* tecnológicos ($h$), se calcularon el $PUE_{i,h}$ y el $WUE_{i,h}$ combinando eficiencias mecánicas, horas de operación en modo seco y húmedo, y el balance de agua evaporativo (evaporación, arrastre por viento y purga de sólidos) basado en el *EnergyPlus Engineering Reference* [@energyplus_eng_ref]:
 
 - **$H_{CONV}$:** Chiller de agua y torre de enfriamiento, con $PUE = 1.80$ y $WUE = 1.80$ L/kWh.
 - **$H_{ECO}$:** Economizador indirecto (IEC). Utiliza la fracción de horas de modo seco $\phi_i$ calculada mes a mes. El consumo hídrico del modo húmedo incorpora el factor de purga $K = 1.335$ para una concentración de sólidos de 4, de acuerdo al modelo de torre de enfriamiento del *EnergyPlus Engineering Reference* (Sección 17.5, Cooling Tower Model [@energyplus_eng_ref]).
-- **$H_{RAD}$:** Enfriamiento radiativo pasivo acoplado a un chiller de respaldo. Su efectividad escala con la fracción de meses secos y despejados ($PW < 10$ mm).
-- **$H_{HYB}$:** Cascada tecnológica. Prioriza la disipación pasiva por radiación, seguida de la evaporación indirecta, y activa el chiller convencional solo como respaldo de tercer nivel.
+- **$H_{RAD}$:** Enfriamiento radiativo pasivo acoplado a un *chiller* de respaldo. Su efectividad escala con la fracción de meses secos y despejados ($PW < 10$ mm).
+- **$H_{HYB}$:** Cascada tecnológica. Prioriza la disipación pasiva por radiación, seguida de la evaporación indirecta, y activa el *chiller* convencional solo como respaldo de tercer nivel.
 
 La @fig-coef resume los coeficientes PUE y WUE resultantes por sitio y *bundle*, todos dentro de los rangos publicados por Lei y Masanet [-@leiClimateTechnologyspecificPUE2022] (1.12–1.25 para híbridos grandes, 1.71–2.22 para convencionales pequeños).
 
@@ -96,7 +96,7 @@ $$
 \text{CAI}_i(d_0) = \sum_{j \in J} C_j \cdot \exp\left(-\frac{d_{ij}}{d_0}\right)
 $$
 
-donde $C_j$ es el curtailment acumulado de la planta $j$ (GWh) y $d_0$ es la escala característica de interconexión. Se modelaron escenarios para $d_0 \in \{20, 50, 100\}$ km (ver @fig-cai).
+donde $C_j$ es el *curtailment* acumulado de la planta $j$ (GWh) y $d_0$ es la escala característica de interconexión. Se modelaron escenarios para $d_0 \in \{20, 50, 100\}$ km (ver @fig-cai).
 
 ![Índice CAI por sitio según diferentes escalas características de interconexión ($d_0$).](figures/fig_6_4_cai.png){#fig-cai width=85%}
 
@@ -120,14 +120,14 @@ Sujeto a:
 
 Los términos con sombrero ($\widehat{\cdot}$) representan valores normalizados min-max para garantizar la aditividad dimensional. El costo total operativo anualizado se define como $\text{Cost}_{i,h} = \text{CAPEX}_{h}\cdot L + p_{energy}\cdot E_{i,h} + p_{water}\cdot W_{i,h}$.
 
-La @tbl-params resume los parámetros de diseño con su fuente o supuesto. Cabe destacar que los valores de CAPEX son un **proxy** derivado de costos de sistemas HVAC de edificios comerciales (PNNL-24904 [@fernandez2015pnnl24904]), no de datacenters; la debilidad de este proxy se aborda con un análisis de sensibilidad de $\pm 50\%$ en la Sección 5.
+La @tbl-params resume los parámetros de diseño con su fuente o supuesto. Cabe destacar que los valores de CAPEX son un **_proxy_** (aproximación) derivado de costos de sistemas HVAC de edificios comerciales (PNNL-24904 [@fernandez2015pnnl24904]), no de datacenters; la debilidad de este *proxy* se aborda con un análisis de sensibilidad de $\pm 50\%$ en la Sección 5.
 
 | Parámetro | Valor | Fuente / supuesto |
 |---|---|---|
 | $L$ (carga IT) | 1 MW | Datacenter modular pequeño (supuesto) |
 | $p_{energy}$ | 0.08 USD/kWh | Proxy del costo marginal zona norte (CNE, ilustrativo) |
 | $p_{water}$ | 3.0 USD/m³ | Tarifa industrial/desalación zona norte (ilustrativo) |
-| $\text{CAPEX}_h$ | 500–800 USD/kW | PNNL-24904 [@fernandez2015pnnl24904], proxy de edificios comerciales |
+| $\text{CAPEX}_h$ | 500–800 USD/kW | PNNL-24904 [@fernandez2015pnnl24904], *proxy* de edificios comerciales |
 | $P$ | $\{1, 2, 3\}$ | Escenarios |
 | Budget | 2 MUSD (caso base) | Escenario ilustrativo |
 | $d_0$ | $\{20, 50, 100\}$ km | Parámetro de sensibilidad (sin datos ECTD reales) |
@@ -153,27 +153,27 @@ El modelo MILP fue resuelto en centésimas de segundo con Gurobi Optimizer [@gur
 Se ejecutó una grilla de 726 escenarios de sensibilidad variando los pesos del objetivo sobre el simplex (paso 0.1), el parámetro $d_0 \in \{20, 50, 100\}$ km, el número de sitios $P \in \{1, 2, 3\}$ y el CAPEX ($\pm 50\%$) (ver @fig-pareto).
 
 - **Robustez de Sitios:** Salar (`SLAR`) es seleccionado en el $86.0\%$ de los 726 escenarios de la grilla completa, seguido por Crucero (`CRUC`) con $49.3\%$ y Armazones (`ARMA`) con $47.0\%$; los tres son localizaciones estables ante cambios en las preferencias de diseño.
-- **Robustez Tecnológica:** El economizador indirecto (`H_ECO`) domina la selección en todos los escenarios gracias a su combinación de bajo costo de capital y alta eficiencia operacional. Para $P=1$, la dominancia es del $100\%$ (selección obligada del mejor bundle); para $P=2$ y $P=3$, alcanza el $98.5\%$ y $95.2\%$ de las combinaciones respectivamente. Para validar que esta dominancia no es un artefacto de los parámetros, se ejecutaron escenarios forzados excluyendo `H_ECO` de la selección: en esos casos el modelo elige `H_HYB` con una penalidad promedio del $12\%$ en el objetivo, lo que confirma que la ventaja de `H_ECO` no depende de la estructura de costos asumida.
-- **Insensibilidad al CAPEX:** El análisis de sensibilidad de $\pm 50\%$ sobre el CAPEX no altera la selección tecnológica: `H_ECO` mantiene su dominancia tanto con $0.5\times$ como con $1.5\times$ el CAPEX base. Esto confirma que la debilidad del proxy PNNL-24904 no condiciona las conclusiones del modelo.
-- **Trade-off Costo-Agua:** La @fig-pareto muestra cómo el portafolio óptimo transita desde soluciones de bajo costo pero alto consumo hídrico (chillers) hacia configuraciones eficientes de evaporación indirecta.
+- **Robustez Tecnológica:** El economizador indirecto (`H_ECO`) domina la selección en todos los escenarios gracias a su combinación de bajo costo de capital y alta eficiencia operacional. Para $P=1$, la dominancia es del $100\%$ (selección obligada del mejor *bundle*); para $P=2$ y $P=3$, alcanza el $98.5\%$ y $95.2\%$ de las combinaciones respectivamente. Para validar que esta dominancia no es un artefacto de los parámetros, se ejecutaron escenarios forzados excluyendo `H_ECO` de la selección: en esos casos el modelo elige `H_HYB` con una penalidad promedio del $12\%$ en el objetivo, lo que confirma que la ventaja de `H_ECO` no depende de la estructura de costos asumida.
+- **Insensibilidad al CAPEX:** El análisis de sensibilidad de $\pm 50\%$ sobre el CAPEX no altera la selección tecnológica: `H_ECO` mantiene su dominancia tanto con $0.5\times$ como con $1.5\times$ el CAPEX base. Esto confirma que la debilidad del *proxy* PNNL-24904 no condiciona las conclusiones del modelo.
+- **_Trade-off_ Costo-Agua:** La @fig-pareto muestra cómo el portafolio óptimo transita desde soluciones de bajo costo pero alto consumo hídrico (*chillers*) hacia configuraciones eficientes de evaporación indirecta.
 
 ![Frontera de Pareto del portafolio óptimo de datacenters ($P=2$) proyectando Costo vs. Agua vs. CAI.](figures/fig_6_5_pareto.png){#fig-pareto width=85%}
 
 ## Discusión y Limitaciones
 
-La optimización revela que las regiones de Antofagasta e Inca de Oro presentan un clima desértico idóneo para disipación de calor por evaporación y radiación nocturna. Para cuantificar el impacto de la selección tecnológica, el consumo hídrico anualizado de un datacenter de 1 MW puede estimarse como $WUE \times L \times 8,760$ h. Un sistema convencional ($H_{CONV}$, WUE = 1.80 L/kWh) consumiría aproximadamente 15,800 m³/año de agua, equivalente a 22 piscinas olímpicas o al consumo de 4,300 hogares chilenos. En contraste, el economizador indirecto ($H_{ECO}$) seleccionado por el modelo reduce este valor a un promedio de 3,900 m³/año (0 en sitios como SLAR donde opera en modo seco permanente, y 7,800 m³/año en sitios como CRUC con operación parcialmente húmeda). Para el portafolio óptimo con $P=2$, el ahorro hídrico total asciende a aproximadamente 23,700 m³/año frente a una solución convencional. Sin embargo, la brecha de transmisión eléctrica en el SEN implica que la viabilidad física del curtailment depende críticamente del desarrollo de redes locales de distribución eléctrica o subtransmisión ($d_0 < 50$ km). Sin incentivos regulatorios adecuados, el costo incremental de interconexión directa podría desalentar la instalación de datacenters sostenibles.
+La optimización revela que las regiones de Antofagasta e Inca de Oro presentan un clima desértico idóneo para disipación de calor por evaporación y radiación nocturna. Para cuantificar el impacto de la selección tecnológica, el consumo hídrico anualizado de un datacenter de 1 MW puede estimarse como $WUE \times L \times 8,760$ h. Un sistema convencional ($H_{CONV}$, WUE = 1.80 L/kWh) consumiría aproximadamente 15,800 m³/año de agua, equivalente a 22 piscinas olímpicas o al consumo de 4,300 hogares chilenos. En contraste, el economizador indirecto ($H_{ECO}$) seleccionado por el modelo reduce este valor a un promedio de 3,900 m³/año (0 en sitios como SLAR donde opera en modo seco permanente, y 7,800 m³/año en sitios como CRUC con operación parcialmente húmeda). Para el portafolio óptimo con $P=2$, el ahorro hídrico total asciende a aproximadamente 23,700 m³/año frente a una solución convencional. Sin embargo, la brecha de transmisión eléctrica en el SEN implica que la viabilidad física del *curtailment* depende críticamente del desarrollo de redes locales de distribución eléctrica o subtransmisión ($d_0 < 50$ km). Sin incentivos regulatorios adecuados, el costo incremental de interconexión directa podría desalentar la instalación de datacenters sostenibles.
 
 ### Limitaciones declaradas
 
-- **CAPEX como proxy:** los costos de capital provienen de PNNL-24904 [@fernandez2015pnnl24904], un estudio de sistemas HVAC de edificios comerciales, no de datacenters. El análisis de sensibilidad de $\pm 50\%$ (Sección 5) muestra que las conclusiones son robustas a esta incertidumbre, pero las magnitudes absolutas de costo deben tratarse como ilustrativas.
+- **CAPEX como _proxy_:** los costos de capital provienen de PNNL-24904 [@fernandez2015pnnl24904], un estudio de sistemas HVAC de edificios comerciales, no de datacenters. El análisis de sensibilidad de $\pm 50\%$ (Sección 5) muestra que las conclusiones son robustas a esta incertidumbre, pero las magnitudes absolutas de costo deben tratarse como ilustrativas.
 - **Extrapolación del modelo radiativo:** los coeficientes de `H_RAD` derivan del modelo de Aili et al. [@AILI2024122672], desarrollado y evaluado mediante simulación con modelos físicos detallados para el clima tropical de Singapur, sin validación experimental de un sistema completo. Su aplicación al Atacama es una extrapolación, respaldada solo parcialmente por la demostración a escala de material de Leroy et al. [@leroyHighperformanceSubambientRadiative2019]; no existe aún validación de un sistema radiativo completo operando en la región.
 - **Capacidad real de red:** el parámetro $d_0$ sustituye los datos de capacidad de interconexión del Estudio de Capacidad Técnica Disponible (ECTD-2022) del Coordinador Eléctrico Nacional [@ectd2022], que no fueron incorporados. El barrido $d_0 \in \{20, 50, 100\}$ km es la defensa metodológica de esta simplificación.
-- **Restricciones hídricas y territoriales:** la restricción de techo de agua por sitio (R7) está estructuralmente preparada pero inactiva por falta de datos de derechos de agua del Catastro Público de Aguas (DGA) [@dga2023]. Análogamente, el screening de áreas protegidas (SNASPE/SEIA) [@snaspe2023] queda como filtro territorial futuro.
-- **Resolución temporal mensual:** el modelo no captura dinámicas horarias transitorias de la red ni la coincidencia horaria entre curtailment y demanda del datacenter.
-- **Endogeneidad del CAI:** el índice se calcula con curtailment histórico (2022--2026). La instalación de nuevos datacenters podría reducir el vertimiento futuro al aumentar la demanda local, creando una relación de retroalimentación que el modelo no captura. Los valores de CAI deben interpretarse como una *cota superior* del beneficio energético sistémico.
+- **Restricciones hídricas y territoriales:** la restricción de techo de agua por sitio (R7) está estructuralmente preparada pero inactiva por falta de datos de derechos de agua del Catastro Público de Aguas (DGA) [@dga2023]. Análogamente, el *screening* de áreas protegidas (SNASPE/SEIA) [@snaspe2023] queda como filtro territorial futuro.
+- **Resolución temporal mensual:** el modelo no captura dinámicas horarias transitorias de la red ni la coincidencia horaria entre *curtailment* y demanda del datacenter.
+- **Endogeneidad del CAI:** el índice se calcula con *curtailment* histórico (2022--2026). La instalación de nuevos datacenters podría reducir el vertimiento futuro al aumentar la demanda local, creando una relación de retroalimentación que el modelo no captura. Los valores de CAI deben interpretarse como una *cota superior* del beneficio energético sistémico.
 - **Validación empírica:** los resultados presentados corresponden a un ejercicio de simulación numérica. Si bien los coeficientes de Etapa 0 están anclados en termodinámica publicada, no se dispone de un datacenter real en la región para validar los PUE/WUE modelados. Trabajo futuro debería incluir un piloto experimental para cerrar esta brecha.
 
-Como trabajo futuro proponemos integrar el costo detallado del catastro del ECTD-2022 [@ectd2022], las restricciones hidrológicas de la DGA [@dga2023], series horarias de curtailment y un piloto experimental de enfriamiento radiativo en la región para cerrar la brecha de validación.
+Como trabajo futuro proponemos integrar el costo detallado del catastro del ECTD-2022 [@ectd2022], las restricciones hidrológicas de la DGA [@dga2023], series horarias de *curtailment* y un piloto experimental de enfriamiento radiativo en la región para cerrar la brecha de validación.
 
 ## Conclusiones
 
