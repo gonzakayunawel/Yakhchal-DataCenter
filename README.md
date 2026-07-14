@@ -76,6 +76,10 @@ This project explores the feasibility of adapting the ancient Persian **Yakhchal
 └── sources/          # Cited papers and reference PDFs (gitignored)
 ```
 
+## AI Usage Disclosure
+
+The use of generative AI tools in this project is documented in [AI_USAGE.md](AI_USAGE.md).
+
 ## License
 
 MIT — see [LICENSE](LICENSE)
