@@ -10,6 +10,7 @@ Produce los gráficos en formato PDF y PNG en el directorio figures/:
 
 from pathlib import Path
 import shutil
+import geopandas as gpd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
@@ -48,7 +49,46 @@ def plot_mapa():
     # Crucero II se excluye del catálogo (misma ubicación que CRUC; ver sección IV)
     stat = stat[stat["codigo"] != "Crucero2"]
 
+    # Geometrías regionales de Chile (Natural Earth 1:10m, cacheado localmente)
+    regiones = gpd.read_file(DATA_DIR / "chile_regiones.geojson")
+    regiones_estudio = [
+        "Arica y Parinacota",
+        "Tarapacá",
+        "Antofagasta",
+        "Atacama",
+        "Coquimbo",
+    ]
+    reg_norte = regiones[regiones["name"].isin(regiones_estudio)]
+
+    # Límites de la zona de estudio (con margen sobre los datos)
+    xmin, xmax = -71.8, -66.6
+    ymin, ymax = -31.8, -17.2
+
     fig, ax = plt.subplots(figsize=(8, 8))
+
+    # Fondo geográfico: polígonos regionales
+    regiones.plot(ax=ax, color="#eee9df", edgecolor="#b0a998", linewidth=0.6)
+    reg_norte.plot(ax=ax, color="#f7f2e6", edgecolor="#8a8272", linewidth=0.9)
+
+    # Etiquetas de regiones de la zona de estudio
+    etiquetas_reg = {
+        "Arica y Parinacota": "XV",
+        "Tarapacá": "I",
+        "Antofagasta": "II",
+        "Atacama": "III",
+        "Coquimbo": "IV",
+    }
+    for _, row in reg_norte.iterrows():
+        pt = row["geometry"].representative_point()
+        ax.annotate(
+            etiquetas_reg[row["name"]],
+            (pt.x, pt.y),
+            color="#8a8272",
+            fontsize=11,
+            style="italic",
+            ha="center",
+            alpha=0.8,
+        )
 
     # Graficar plantas con curtailment
     solar = curt[curt["tipo"] == "Solar"]
@@ -104,7 +144,30 @@ def plot_mapa():
     ax.set_xlabel("Longitud (°W)")
     ax.set_ylabel("Latitud (°S)")
     ax.legend(loc="upper left", bbox_to_anchor=(1.02, 1.0), frameon=True)
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(ymin, ymax)
     ax.set_aspect("equal", adjustable="box")
+
+    # Inset: Chile continental con la zona de estudio destacada
+    axins = fig.add_axes([0.63, 0.13, 0.22, 0.34])
+    regiones.plot(ax=axins, color="#e0dacc", edgecolor="#b0a998", linewidth=0.3)
+    axins.add_patch(
+        plt.Rectangle(
+            (xmin, ymin),
+            xmax - xmin,
+            ymax - ymin,
+            fill=False,
+            edgecolor="#c0392b",
+            linewidth=1.5,
+        )
+    )
+    axins.set_xlim(-76.5, -66.0)  # Chile continental (excluye territorio insular)
+    axins.set_ylim(-56.5, -17.0)
+    axins.set_xticks([])
+    axins.set_yticks([])
+    axins.set_title("Chile", fontsize=8)
+    for spine in axins.spines.values():
+        spine.set_edgecolor("#8a8272")
 
     plt.tight_layout()
     fig.savefig(FIGURES_DIR / "fig_6_1_mapa.pdf", format="pdf")
