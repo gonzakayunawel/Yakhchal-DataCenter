@@ -101,24 +101,38 @@ donde $C_j$ es el *curtailment* acumulado de la planta $j$ (GWh) y $d_0$ es la e
 ![Índice CAI por sitio según diferentes escalas características de interconexión ($d_0$).](figures/fig_6_4_cai.png){#fig-cai width=85%}
 
 ### Etapa 1: Modelo MILP de Localización
-El modelo de optimización lineal entero-mixto se formula como sigue:
+
+**Conjuntos e índices.** Sea $I$ el conjunto de sitios candidatos ($|I| = 10$, indexados por $i$) y $H$ el conjunto de *bundles* tecnológicos de enfriamiento ($|H| = 4$: $H_{CONV}$, $H_{ECO}$, $H_{RAD}$, $H_{HYB}$, indexados por $h$).
+
+**Parámetros.** Para cada par sitio-tecnología $(i,h)$, la Etapa 0 entrega los coeficientes $PUE_{i,h}$ y $WUE_{i,h}$, a partir de los cuales se derivan los parámetros anualizados del modelo, con $L$ la carga IT (kW) y $8{,}760$ las horas del año:
+
+- $E_{i,h} = PUE_{i,h} \cdot L \cdot 8{,}760$: consumo energético anual (kWh/año).
+- $W_{i,h} = WUE_{i,h} \cdot L \cdot 8{,}760 / 1{,}000$: consumo hídrico anual (m³/año).
+- $\text{Cost}_{i,h} = \text{CAPEX}_{h}\cdot L + p_{energy}\cdot E_{i,h} + p_{water}\cdot W_{i,h}$: costo total anualizado (USD/año).
+
+Además, $\text{CAI}_i$ es el índice de disponibilidad de *curtailment* del sitio $i$ (sección anterior), $z_i \in \{0,1\}$ el resultado del *screening* climático de Etapa 0, $P$ el número de datacenters a localizar y $\text{Budget}$ el presupuesto de inversión disponible. Como los tres criterios tienen unidades incomparables (USD, m³, GWh), cada uno se normaliza mediante escalamiento min-max sobre todos los pares $(i,h)$; los valores normalizados se denotan con sombrero: $\widehat{\text{Cost}}_{i,h}, \widehat{W}_{i,h}, \widehat{\text{CAI}}_i \in [0,1]$.
+
+**Variables de decisión.** El modelo decide simultáneamente dónde localizar y qué tecnología instalar:
+
+- $x_i \in \{0,1\}$: vale 1 si se localiza un datacenter en el sitio $i$, 0 en caso contrario.
+- $y_{i,h} \in \{0,1\}$: vale 1 si al datacenter del sitio $i$ se le asigna la tecnología de enfriamiento $h$, 0 en caso contrario.
+
+**Función objetivo.** El problema multiobjetivo se escalariza mediante suma ponderada, con pesos $\alpha, \beta, \gamma \geq 0$, $\alpha + \beta + \gamma = 1$, que representan la importancia relativa asignada al costo económico ($\alpha$), al consumo de agua ($\beta$) y al aprovechamiento de energía renovable vertida ($\gamma$):
 
 $$
-\min_{x, y} \; \sum_{i,h} \left( \alpha\, \widehat{\text{Cost}}_{i,h} + \beta\, \widehat{W}_{i,h} \right) y_{i,h} - \gamma \sum_{i} \widehat{\text{CAI}}_{i}\, x_{i}
+\min_{x, y} \; \sum_{i \in I}\sum_{h \in H} \left( \alpha\, \widehat{\text{Cost}}_{i,h} + \beta\, \widehat{W}_{i,h} \right) y_{i,h} - \gamma \sum_{i \in I} \widehat{\text{CAI}}_{i}\, x_{i}
 $$
 
-donde las sumas recorren $i \in I$ y $h \in H$.
+El término del CAI entra con signo negativo porque, a diferencia del costo y del agua, es un atributo deseable a maximizar. Al no existir pesos "correctos" a priori, la sensibilidad de la solución a $(\alpha,\beta,\gamma)$ se explora mediante un barrido sobre el simplex con paso 0.1 (Sección 5).
 
 Sujeto a:
 
 1. $\sum_{h \in H} y_{i,h} = x_{i} \quad \forall i \in I$ (Asignación tecnológica única)
-2. $y_{i,h} \le x_{i} \quad \forall i \in I, h \in H$ (Consistencia de variables)
+2. $y_{i,h} \le x_{i} \quad \forall i \in I, h \in H$ (Consistencia de variables; redundante con 1, se incluye para fortalecer la relajación LP)
 3. $x_{i} \le z_{i} \quad \forall i \in I$ (Screening climático estricto)
 4. $\sum_{i \in I} x_{i} = P$ (Número de datacenters a localizar)
 5. $\sum_{i \in I, h \in H} \text{CAPEX}_{h} \cdot L \cdot y_{i,h} \le \text{Budget}$ (Restricción de presupuesto)
 6. $x_i, y_{i,h} \in \{0, 1\}$ (Dominio de variables)
-
-Los términos con sombrero ($\widehat{\cdot}$) representan valores normalizados min-max para garantizar la aditividad dimensional. El costo total operativo anualizado se define como $\text{Cost}_{i,h} = \text{CAPEX}_{h}\cdot L + p_{energy}\cdot E_{i,h} + p_{water}\cdot W_{i,h}$.
 
 La @tbl-params resume los parámetros de diseño con su fuente o supuesto. Cabe destacar que los valores de CAPEX son un **_proxy_** (aproximación) derivado de costos de sistemas HVAC de edificios comerciales (PNNL-24904 [@fernandez2015pnnl24904]), no de datacenters; la debilidad de este *proxy* se aborda con un análisis de sensibilidad de $\pm 50\%$ en la Sección 5.
 
@@ -161,7 +175,7 @@ Se ejecutó una grilla de 726 escenarios de sensibilidad variando los pesos del 
 
 ## Discusión y Limitaciones
 
-La optimización revela que las regiones de Antofagasta e Inca de Oro presentan un clima desértico idóneo para disipación de calor por evaporación y radiación nocturna. Para cuantificar el impacto de la selección tecnológica, el consumo hídrico anualizado de un datacenter de 1 MW puede estimarse como $WUE \times L \times 8,760$ h. Un sistema convencional ($H_{CONV}$, WUE = 1.80 L/kWh) consumiría aproximadamente 15,800 m³/año de agua, equivalente a 22 piscinas olímpicas o al consumo de 4,300 hogares chilenos. En contraste, el economizador indirecto ($H_{ECO}$) seleccionado por el modelo reduce este valor a un promedio de 3,900 m³/año (0 en sitios como SLAR donde opera en modo seco permanente, y 7,800 m³/año en sitios como CRUC con operación parcialmente húmeda). Para el portafolio óptimo con $P=2$, el ahorro hídrico total asciende a aproximadamente 23,700 m³/año frente a una solución convencional. Sin embargo, la brecha de transmisión eléctrica en el SEN implica que la viabilidad física del *curtailment* depende críticamente del desarrollo de redes locales de distribución eléctrica o subtransmisión ($d_0 < 50$ km). Sin incentivos regulatorios adecuados, el costo incremental de interconexión directa podría desalentar la instalación de datacenters sostenibles.
+La optimización revela que las región de Antofagasta presenta un clima desértico idóneo para disipación de calor por evaporación y radiación nocturna. Para cuantificar el impacto de la selección tecnológica, el consumo hídrico anualizado de un datacenter de 1 MW puede estimarse como $WUE \times L \times 8,760$ h. Un sistema convencional ($H_{CONV}$, WUE = 1.80 L/kWh) consumiría aproximadamente 15,800 m³/año de agua, equivalente a 22 piscinas olímpicas o al consumo de 4,300 hogares chilenos. En contraste, el economizador indirecto ($H_{ECO}$) seleccionado por el modelo reduce este valor a un promedio de 3,900 m³/año (0 en sitios como SLAR donde opera en modo seco permanente, y 7,800 m³/año en sitios como CRUC con operación parcialmente húmeda). Para el portafolio óptimo con $P=2$, el ahorro hídrico total asciende a aproximadamente 23,700 m³/año frente a una solución convencional. Sin embargo, la brecha de transmisión eléctrica en el SEN implica que la viabilidad física del *curtailment* depende críticamente del desarrollo de redes locales de distribución eléctrica o subtransmisión ($d_0 < 50$ km). Sin incentivos regulatorios adecuados, el costo incremental de interconexión directa podría desalentar la instalación de datacenters sostenibles.
 
 ### Limitaciones declaradas
 
@@ -172,8 +186,9 @@ La optimización revela que las regiones de Antofagasta e Inca de Oro presentan 
 - **Resolución temporal mensual:** el modelo no captura dinámicas horarias transitorias de la red ni la coincidencia horaria entre *curtailment* y demanda del datacenter.
 - **Endogeneidad del CAI:** el índice se calcula con *curtailment* histórico (2022--2026). La instalación de nuevos datacenters podría reducir el vertimiento futuro al aumentar la demanda local, creando una relación de retroalimentación que el modelo no captura. Los valores de CAI deben interpretarse como una *cota superior* del beneficio energético sistémico.
 - **Validación empírica:** los resultados presentados corresponden a un ejercicio de simulación numérica. Si bien los coeficientes de Etapa 0 están anclados en termodinámica publicada, no se dispone de un datacenter real en la región para validar los PUE/WUE modelados. Trabajo futuro debería incluir un piloto experimental para cerrar esta brecha.
+- **Conectividad digital:** el modelo no considera la conectividad de telecomunicaciones de los sitios candidatos (disponibilidad de fibra óptica, latencia hacia los centros de demanda). Esta exclusión fue una decisión deliberada de alcance, para acotar el estudio a las variables climáticas, geográficas y de disponibilidad energética que constituyen su aporte central. Para un despliegue real, la conectividad es un criterio de localización de primer orden que podría penalizar sitios remotos favorecidos por el clima.
 
-Como trabajo futuro proponemos integrar el costo detallado del catastro del ECTD-2022 [@ectd2022], las restricciones hidrológicas de la DGA [@dga2023], series horarias de *curtailment* y un piloto experimental de enfriamiento radiativo en la región para cerrar la brecha de validación.
+Como trabajo futuro proponemos integrar el costo detallado del catastro del ECTD-2022 [@ectd2022], las restricciones hidrológicas de la DGA [@dga2023], series horarias de *curtailment*, la infraestructura de conectividad digital como criterio adicional de localización, y un piloto experimental de enfriamiento radiativo en la región para cerrar la brecha de validación.
 
 ## Conclusiones
 
