@@ -78,11 +78,14 @@ def plot_mapa():
         "Atacama": "III",
         "Coquimbo": "IV",
     }
+    # Posiciones manuales (lon, lat) para evitar colisiones con etiquetas de sitios
+    posiciones_reg = {"Tarapacá": (-69.55, -19.5)}  # "I" centrado, sobre PALM
     for _, row in reg_norte.iterrows():
         pt = row["geometry"].representative_point()
+        x, y = posiciones_reg.get(row["name"], (pt.x, pt.y))
         ax.annotate(
             etiquetas_reg[row["name"]],
-            (pt.x, pt.y),
+            (x, y),
             color="#8a8272",
             fontsize=11,
             style="italic",
