@@ -56,11 +56,16 @@ This project explores the feasibility of adapting the ancient Persian **Yakhchal
    ```bash
    uv run methods/figuras.py
    ```
+   > [!NOTE]
+   > All generated figure files (PDF/PNG) are gitignored. You must run this command to generate or update figures locally before compiling the document.
 
 8. **Render Quarto Paper to PDF:**
    ```bash
    cd docs/ieee-paper && quarto render ieee-paper.qmd
    ```
+   > [!NOTE]
+   > The paper is rendered using the **Typst** engine (`format: ieee-typst`). The PDF file itself is gitignored and should be re-rendered from the source `.qmd` files as needed.
+
 
 9. **Lint & Format code:**
    ```bash
