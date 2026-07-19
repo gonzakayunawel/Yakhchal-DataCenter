@@ -49,7 +49,7 @@ The project structure is organized as follows:
     * `refs.bib`: BibTeX bibliography file managed via Zotero.
 * [results/](file:///home/gonz4/Code/Yakhchal-DataCenter/results) — Numeric outputs and validation reports from experiments.
 * [figures/](file:///home/gonz4/Code/Yakhchal-DataCenter/figures) — Reproducible graphics and study area maps (gitignored, generated locally).
-* [data/](file:///home/gonz4/Code/Yakhchal-DataCenter/data) — Raw climatological data from Walker Network and CEN curtailment logs (gitignored).
+* [data/](file:///home/gonz4/Code/Yakhchal-DataCenter/data) — Raw climatological data from Walker Network and CEN curtailment logs. Most source files and consolidated datasets (e.g. `curtailment_acumulado.csv`) are committed; large cached station CSVs and manual GIS exports are gitignored (see [Quick Start Guide](#quick-start-guide) step 2).
 
 ---
 
@@ -58,7 +58,8 @@ The project structure is organized as follows:
 | Tool | Usage / Purpose |
 | :--- | :--- |
 | **Python $\ge$ 3.14** | Numerical modeling, physical balance simulations, and data wrangling. |
-| **Quarto** | Academic document compiler to render PDF papers via **ieee-typst**. |
+| **Quarto CLI** | Academic document compiler to render PDF papers via **ieee-typst**. System binary, installed separately (see note below). |
+| **Typst** | Typesetting engine invoked by Quarto's `ieee-typst` format. System binary, installed separately (see note below). |
 | **uv** | Fast, deterministic Python package installer and dependency resolver. |
 | **Gurobi Optimizer** | Industrial-grade solver used to solve the Stage 1 MILP model. |
 | **ruff** | Python linter and formatter enforcing PEP 8 style guide compliance. |
@@ -66,6 +67,9 @@ The project structure is organized as follows:
 
 ### Primary Python Dependencies:
 `gurobipy`, `pandas`, `numpy`, `matplotlib`, `seaborn`, `geopandas`, `scipy`, `scikit-learn`, `ruff`, `quarto`.
+
+> [!NOTE]
+> The `quarto` entry above is a thin Python wrapper — it does **not** install the Quarto CLI itself. Quarto and Typst are system binaries that `uv sync` cannot resolve; see step 8 of the Quick Start Guide for install instructions.
 
 ---
 
@@ -84,6 +88,8 @@ Follow these steps in order to sync your environment, process the datasets, solv
    uv run methods/wind_stations_pipeline.py
    uv run methods/curtailment_pipeline.py
    ```
+   > [!IMPORTANT]
+   > `curtailment_pipeline.py` georeferences plants using ESRI shapefiles manually exported from the [IDE Energía web viewer](https://ide-energia.minenergia.cl/portal/apps/webappviewer/index.html?id=5c526a138b1449458e0667b2235d2b19) (not a stable download URL, so it can't be automated). These exports (`data/output*.zip`) are gitignored and **not required** to reproduce the paper: `data/curtailment_acumulado.csv` is already committed with the exact dataset used in the study, so on a fresh clone you can skip this script entirely. Only rerun it if you need to regenerate the dataset (e.g. with newer CEN reports) — in that case, export the `Solares` and `Eólica` layers from the viewer per map viewport, save each export as `data/output.zip`, `data/output (1).zip`, etc., then run the script.
 
 3. **Precompute Stage 0 coefficients (PUE/WUE matrix):**
    ```bash
@@ -118,6 +124,20 @@ Follow these steps in order to sync your environment, process the datasets, solv
    ```
    > [!NOTE]
    > The paper is compiled using **Typst** for high rendering speeds and typesetting quality. The output PDF is gitignored.
+
+   > [!IMPORTANT]
+   > This step requires the **Quarto** and **Typst** CLI binaries on your `PATH`. Neither is installed by `uv sync` — the `quarto` PyPI package is only a Python wrapper that shells out to the real `quarto` binary. Install both as regular system binaries (no `sudo` needed — both ship as self-contained tarballs):
+   > ```bash
+   > # Quarto (get the current version/URL from https://quarto.org/docs/get-started/)
+   > curl -L -o quarto.tar.gz https://github.com/quarto-dev/quarto-cli/releases/latest/download/quarto-1.9.38-linux-amd64.tar.gz
+   > mkdir -p ~/.local/opt && tar -xzf quarto.tar.gz -C ~/.local/opt && mv ~/.local/opt/quarto-*/ ~/.local/opt/quarto
+   > ln -sf ~/.local/opt/quarto/bin/quarto ~/.local/bin/quarto
+   >
+   > # Typst (get the current version/URL from https://github.com/typst/typst/releases)
+   > curl -L -o typst.tar.xz https://github.com/typst/typst/releases/latest/download/typst-x86_64-unknown-linux-musl.tar.xz
+   > tar -xJf typst.tar.xz && cp typst-*/typst ~/.local/bin/typst && chmod +x ~/.local/bin/typst
+   > ```
+   > Make sure `~/.local/bin` is on your `PATH`, then verify with `quarto --version` and `typst --version`.
 
 9. **Lint & Format code (Style Check):**
    ```bash
